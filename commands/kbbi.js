@@ -19,8 +19,8 @@ const cari = async (keyword) => {
 }
 
 module.exports = {
-    name: "KBBI",
-    description: "chat dengan AI",
+    name: "kbbi",
+    description: "mencari arti kata (lema/sub lema)",
     alias: ["kbbi", "kbi", "ki", "k"],
     async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
         if (text.split(" ").length >= 2) {
