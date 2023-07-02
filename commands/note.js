@@ -12,8 +12,13 @@ module.exports = {
             note.set(command.name, command)
         });
         
-        var grup = await sock.groupMetadata(senderNumber);
-        var db = new Enmap({name: `${process.env.enmap}${grup.id}`, dataDir: './database'})
+        if (senderNumber.includes("@g.us")) {
+            var grup = await sock.groupMetadata(senderNumber);
+            var db = new Enmap({name: `${process.env.enmap}${grup.id}`, dataDir: './database'})
+        }
+        else {
+            var db = new Enmap({name: `${process.env.enmap}${senderNumber}`, dataDir: './database'})
+        }
 
         if (db.get('note') == undefined) {
             db.set('note', [])

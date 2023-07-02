@@ -6,6 +6,7 @@ const {
 } = require("@whiskeysockets/baileys");
 const { Boom } = require("@hapi/boom");
 const fs = require('fs');
+const thisAPI = require("./functions/server.js")
 
 // require("http").createServer((_, res) => res.end("Uptime!")).listen(8080)
 
@@ -46,12 +47,15 @@ async function connectToWhatsApp() {
             const nomorPengirim = (messages[0].key.participant == undefined) ? messages[0].key.remoteJid.split('@')[0] : messages[0].key.participant.split('@')[0]
             let incomingMessages = messages[0].message.conversation;
             let quotedPesan = false
-            if (messages[0].message.hasOwnProperty('extendedTextMessage')) {
-                incomingMessages = messages[0].message.extendedTextMessage.text;
-                quotedPesan = messages[0].message.extendedTextMessage.contextInfo.hasOwnProperty('quotedMessage')
-            }
-            else if (messages[0].message.hasOwnProperty('imageMessage')) {
-                incomingMessages = messages[0].message.imageMessage.caption;
+            try {
+                if (messages[0].message.hasOwnProperty('extendedTextMessage')) {
+                    incomingMessages = messages[0].message.extendedTextMessage.text;
+                    quotedPesan = messages[0].message.extendedTextMessage.contextInfo.hasOwnProperty('quotedMessage')
+                }
+                else if (messages[0].message.hasOwnProperty('imageMessage')) {
+                    incomingMessages = messages[0].message.imageMessage.caption;
+                }
+            } catch (err) {
             }
 
             if (incomingMessages.startsWith(process.env.command)) {
@@ -87,6 +91,7 @@ async function connectToWhatsApp() {
             }
         }
     })
+    thisAPI.execute(sock)
 }
 
 connectToWhatsApp().catch((err) => {
