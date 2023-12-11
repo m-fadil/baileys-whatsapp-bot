@@ -27,6 +27,7 @@ module.exports = {
             const data = req.body
             res.send(await chat(data.id, data.text, data.pembuat))
         })
+        app.get('/', (req, res) => res.send('Uptime!'));
         app.listen(3000, () => {
             console.log("Server berjalan di http://localhost:3000")
         })
@@ -58,7 +59,7 @@ module.exports = {
                 }, 1000)
                 await sock.sendMessage(
                     `${nomor}@s.whatsapp.net`,
-                    {text: `${rawId}`},
+                    {text: `kode verifikasi anda:\n\n*${rawId}*`},
                     1000
                 )
             }
@@ -90,10 +91,10 @@ module.exports = {
         }
         
         async function chat(id, text, nama) {
-            if (nama == '') nama='anonim'
+            if (nama == null || nama == '') nama='anonim'
             if (!nama.startsWith('~')) nama = `~${nama}`
             id = simpleCrypto.decrypt(id)
-            text = `${text}\n${nama}`
+            text = `${text}\n\n${nama}`
             await sock.sendMessage(
                 id,
                 {text: text},
@@ -103,5 +104,3 @@ module.exports = {
         }
     },
 }
-
-

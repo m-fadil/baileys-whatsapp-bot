@@ -2,6 +2,7 @@ module.exports = {
     name: "inisial_add",
     description: "menambah anggota pada tag",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, db, tags) {
+        var grup = await sock.groupMetadata(senderNumber);
         let role = text.split(' ')[1]
         let arrTagar = ''
         quotedPesan ? arrTagar = messages[0].message.extendedTextMessage.contextInfo.participant : arrTagar = text.split(' ').slice(2, text.length).join('')

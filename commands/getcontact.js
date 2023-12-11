@@ -18,6 +18,7 @@ module.exports = {
             if (!nomor.startsWith("0")) {
                 nomor = `+${nomor}`
             }
+            console.log(nomor)
             getContact
                 .checkNumber(nomor)
                 .then(async (data) => {
@@ -38,9 +39,17 @@ module.exports = {
                     );
                 })
                 .catch(async (err) => {
+                    try {
+                        const errorMsg = err.toString();
+                        const cleanedErrorText = errorMsg.replace(/^Error: /, '');
+                        const errorJSON = JSON.parse(cleanedErrorText)
+                        var pesan = `Terdapat ERROR!\n${errorJSON.result.subscriptionInfo.subsInfoButtonIntroText}`
+                    } catch {
+                        var pesan = "Gagal mengurai pesan error"
+                    }
                     await sock.sendMessage(
                         senderNumber,
-                        { text: err },
+                        { text:  pesan},
                         { quoted: messages[0] },
                         1000
                     );

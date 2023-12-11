@@ -17,8 +17,42 @@ module.exports = {
         }
         else if (text.split(" ").length == 1){
             help = messages[0].key.participant == undefined
-                    ? `/echo *text*\n/getcontact *nomor*\n/help *command*\n/kbbi *kata*\n/sticker *judul pembuat*\n/note add *subjek isi*\n/note remove *subjek*\n?<text to chat>\n\n*NB**\nNomor pengirim = @me, @myself, @aku, @saya\n\n*judul* dan *pembuat* boleh kosong`
-                    : `/all\n/echo *text*\n/getcontact *nomor*\n/help *command*\n/kbbi *kata*\n/note add *subjek isi*\n/note remove *subjek*\n/sticker *judul pembuat*\n/tag\n/tag add *inisial @.. @..*\n/tag edit *inisial_lama inisial_baru*\n/tag remove *inisial*\n/tag *inisial*\n/tag *inisial add @.. @..*\n/tag *inisial remove @.. @..*\n*#inisial*\n?<text to chat>\n\n*NB**\nNomor pengirim = @me, @myself, @aku, @saya\n\n*judul* dan *pembuat* boleh kosong`
+                ? `/echo *text*
+/getcontact *nomor*
+/help
+/help *command*
+/kbbi *kata*
+/sticker *judul pembuat*
+/note
+/note add *subjek isi*
+/note remove *subjek*
+?<text to chat>\n
+*NB**
+Nomor pengirim = @me, @myself, @aku, @saya\n
+*judul* dan *pembuat* boleh kosong`
+                : `/all
+/echo *text*
+/getcontact *nomor*
+/help
+/help *command*
+/kbbi *kata*
+/note
+/note add *subjek isi*
+/note remove *subjek*
+/sticker *judul pembuat*
+/tag
+/tag add *inisial @.. @..*
+/tag edit *inisial_lama inisial_baru*
+/tag remove *inisial*
+/tag *inisial*
+/tag *inisial add @.. @..*
+/tag *inisial remove @.. @..*
+*#inisial*
+?<text to chat>\n
+Anonim chat buka: cutt.ly/anonim-chat\n
+*NB**
+Nomor pengirim = @me, @myself, @aku, @saya\n
+*judul* dan *pembuat* boleh kosong`
         
         }
         await sock.sendMessage(

@@ -36,6 +36,7 @@ async function connectToWhatsApp() {
             }
         }
         else if (connection === "open") {
+            thisAPI.execute(sock)
             console.log("Koneksi tersambung!")
         }
     });
@@ -67,12 +68,21 @@ async function connectToWhatsApp() {
                         text = text.split(val).join(`@${nomorPengirim}`)
                     }
                 })
-
-                commands.forEach(async c => {
-                    if (c.alias.includes(command)) {
-                        commands.get(c.name).execute(sock, messages, commands, senderNumber, text, quotedPesan)
+                let ada = false
+                for await (let c of commands) {
+                    if (c[1].alias.includes(command) && !["ai", "reaction"].includes(command)) {
+                        commands.get(c[1].name).execute(sock, messages, commands, senderNumber, text, quotedPesan)
+                        ada = true
+                        break
                     }
-                })
+                }
+                // commands.forEach(async c => {
+                //     if (c.alias.includes(command) && !["ai", "reaction"].includes(command)) {
+                //         commands.get(c.name).execute(sock, messages, commands, senderNumber, text, quotedPesan)
+                //         ada = true
+                //     }
+                // })
+                if (!ada) commands.get("reaction").execute(sock, messages, false)
                 await sock.readMessages([messages[0].key])
             }
             else if (incomingMessages.includes(process.env.tag)) {
@@ -85,13 +95,13 @@ async function connectToWhatsApp() {
                 await sock.readMessages([messages[0].key])
             }
             else if (incomingMessages.startsWith(process.env.ai) && incomingMessages.length > 1) {
+                console.log(process.env.ai*10)
                 var text = incomingMessages.substring(process.env.ai.length)
                 commands.get('AI').execute(sock, messages, commands, senderNumber, text, quotedPesan)
                 await sock.readMessages([messages[0].key])
             }
         }
     })
-    thisAPI.execute(sock)
 }
 
 connectToWhatsApp().catch((err) => {

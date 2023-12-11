@@ -5,9 +5,10 @@ module.exports = {
         let role = text.split(' ')[2]
         let arrTagar = text.split(' ').slice(3, text.length).join('')
         if (['add', 'edit', 'remove', 'del'].includes(role)) {
-            commands.get('')
+            commands.get("reaction").execute(sock, messages, false)
         }
         else if (!db.get('tag').includes(role)) {
+            var grup = await sock.groupMetadata(senderNumber);
             const jids = []
             let msg = ''
             if (quotedPesan) {
