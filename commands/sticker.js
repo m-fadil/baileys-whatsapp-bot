@@ -4,7 +4,7 @@ module.exports = {
     name: "sticker",
     description: "membuat sticker dari gambar",
     alias: ["sticker", "stiker", "s"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
         try {
             if (messages[0].message.hasOwnProperty('imageMessage') || messages[0].message.extendedTextMessage.contextInfo.hasOwnProperty('quotedMessage')) {
                 let rdm = Math.floor(Math.random() * 99999).toString()

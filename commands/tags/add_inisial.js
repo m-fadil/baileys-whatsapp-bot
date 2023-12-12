@@ -1,14 +1,14 @@
 module.exports = {
     name: "add_inisial",
     description: "menambahkan inisial tag dan anggotanya",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, db) {
-        let role = text.split(' ')[2]
-        let arrTagar = text.split(' ').slice(3, text.length).join('')
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tags, tags, grup) {
+        const role = text.split(' ')[2]
+        const arrTagar = text.split(' ').slice(3, text.length).join('')
+
         if (['add', 'edit', 'remove', 'del'].includes(role)) {
             commands.get("reaction").execute(sock, messages, false)
         }
-        else if (!db.get('tag').includes(role)) {
-            var grup = await sock.groupMetadata(senderNumber);
+        else if (!tags.roles.find(roles => roles.name == role)) {
             const jids = []
             let msg = ''
             if (quotedPesan) {
@@ -27,10 +27,20 @@ module.exports = {
                     );
                 })
             }
-            db.push('tag', role)
-            db.set(role, {jids: jids, msg: msg})
-            commands.get("reaction").execute(sock, messages, true)
-        }else {
+            const data = {
+                $push: {
+                    "roles": {
+                        name: role,
+                        jids: jids,
+                        msg: msg
+                    }
+                }
+            }
+            await coll_tags.updateOne({"title": tags.title}, data).then(() => {
+                commands.get("reaction").execute(sock, messages, true)
+            })
+        }
+        else {
             await sock.sendMessage(
                 senderNumber,
                 {text: `inisial ${role} sudah ada`},

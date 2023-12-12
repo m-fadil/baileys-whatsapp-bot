@@ -1,41 +1,32 @@
-const Enmap = require("enmap")
 const fs = require('fs');
 
 module.exports = {
     name: "tag",
     description: "menampilkan tags",
     alias: ["tag", "t"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
-        const tags = new Map();
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+        const tagsCommand = new Map();
         fs.readdirSync(`./commands/tags`).filter(file => file.endsWith('.js')).forEach(file => {
             const command = require(`./tags/${file}`)
-            tags.set(command.name, command)
+            tagsCommand.set(command.name, command)
         });
 
         const isMessageFromGroup = senderNumber.includes("@g.us");
         if (isMessageFromGroup) {
-            var grup = await sock.groupMetadata(senderNumber);
-            var db = new Enmap({name: `${process.env.enmap}${grup.id}`, dataDir: './database'})
-
-            if (db.get('tag') == undefined) {
-                db.set('tag', [])
-            }
-            if (text.split(' ').length == 1) {
-                if (!db.get('tag').includes('all')) {
-                    const jids = []
-                    let msg = ""
-                    grup["participants"].map(
-                        async (usr) => {
-                            if (!usr.id.includes(process.env.nomor)) {
-                                msg += "@" + usr.id.split("@")[0] + " "
-                                jids.push(usr.id.replace("c.us", "s.whatsapp.net"))
-                            }
-                        }
-                    )
-                    db.push('tag', 'all')
-                    db.set('all', {jids: jids, msg: msg})
+            const grup = await sock.groupMetadata(senderNumber)
+            const coll_tags = database.collection("tags")
+            const tags = await coll_tags.findOne({"title": grup.id}).then(async (result) => {
+                if (!result) {
+                    const data = {
+                        title: grup.id,
+                        roles: []
+                    }
+                    await coll_tags.insertOne(data)
                 }
-                var msg = db.get('tag').join('\n')
+                return await coll_tags.findOne({"title": grup.id})
+            })
+            if (text.split(' ').length == 1) {
+                const msg = tags.roles.map(role => role.name).join("\n")
                 await sock.sendMessage(
                     senderNumber,
                     {text: msg},
@@ -44,16 +35,16 @@ module.exports = {
                 );
             }
             else if (text.toLowerCase().split(' ')[1] == 'add') {
-                tags.get('add_inisial').execute(...arguments, db)
+                tagsCommand.get('add_inisial').execute(...arguments, coll_tags, tags, grup)
             }
             else if (text.toLowerCase().split(' ')[1] == 'edit') {
-                tags.get('edit_inisial').execute(...arguments, db)
+                tagsCommand.get('edit_inisial').execute(...arguments, coll_tags, tags)
             }
             else if (text.toLowerCase().split(' ')[1] == 'remove' || text.toLowerCase().split(' ')[1] == 'del') {
-                tags.get('remove_inisial').execute(...arguments, db)
+                tagsCommand.get('remove_inisial').execute(...arguments, coll_tags, tags)
             }
-            else if(db.get('tag').includes(text.split(' ')[1])) {
-                tags.get('inisial').execute(...arguments, db, tags)
+            else if(tags.roles.find(roles => roles.name == text.split(' ')[1])) {
+                tagsCommand.get('inisial').execute(...arguments, tagsCommand, coll_tags, tags, grup)
             }
         } 
         else {

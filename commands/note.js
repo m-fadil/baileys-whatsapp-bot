@@ -5,27 +5,32 @@ module.exports = {
     name: "note",
     description: "menyimpan catatan",
     alias: ["note"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
         const note = new Map();
         fs.readdirSync(`./commands/note`).filter(file => file.endsWith('.js')).forEach(file => {
             const command = require(`./note/${file}`)
             note.set(command.name, command)
         });
         
-        if (senderNumber.includes("@g.us")) {
-            var grup = await sock.groupMetadata(senderNumber);
-            var db = new Enmap({name: `${process.env.enmap}${grup.id}`, dataDir: './database'})
-        }
-        else {
-            var db = new Enmap({name: `${process.env.enmap}${senderNumber}`, dataDir: './database'})
-        }
+        const coll_notes = database.collection("notes");
+        const title = senderNumber.includes("@g.us") ? grup.id : senderNumber
+        await sock.groupMetadata(senderNumber).then(async (grup) => {
+            return await coll_notes.findOne({"title": title}).then(async (result) => {
+                if (!result) {
+                    const data = {
+                        title: title,
+                        note: []
+                    }
+                    await coll_notes.insertOne(data)
+                }
+                return await coll_notes.findOne({"title": title})
+            })
+        })
 
-        if (db.get('note') == undefined) {
-            db.set('note', [])
-        }
         if (text.split(' ').length == 1) {
-            if (db.get('note').length == 0) var msg = 'belum ada note yang ditambahkan'
-            else var msg = db.get('note').join('\n')
+            const msg = draft.note.length <= 0
+                      ? 'belum ada note yang ditambahkan'
+                      : draft.note.join('\n')
             await sock.sendMessage(
                 senderNumber,
                 {text: msg},
@@ -34,10 +39,10 @@ module.exports = {
             );
         }
         else if (text.toLowerCase().split(' ')[1] == 'add') {
-            note.get("add_note").execute(...arguments, db)
+            note.get("add_note").execute(...arguments, coll_notes)
         }
         else if (text.toLowerCase().split(' ')[1] == 'remove' || text.toLowerCase().split(' ')[1] == 'del') {
-            note.get("remove_note").execute(...arguments, db)
+            note.get("remove_note").execute(...arguments, coll_notes)
         }
         else if(db.get('note').includes(text.split(' ')[1])) {
             if (text.split(' ').length == 2) {
