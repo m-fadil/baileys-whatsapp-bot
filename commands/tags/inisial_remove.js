@@ -1,18 +1,30 @@
 module.exports = {
     name: "inisial_remove",
     description: "menghapus anggota pada tag",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, db, tags) {
-        let role = text.split(' ')[1]
-        let arrTagar = ''
-        quotedPesan ? arrTagar = messages[0].message.extendedTextMessage.contextInfo.participant : arrTagar = text.split(' ').slice(2, text.length).join('')
-        let msg = db.get(role, 'msg')
-        arrTagar.split('@').forEach(val => {
-            if (db.get(role, 'msg').includes(`@${val}`)){
-                db.remove(role, val+'@s.whatsapp.net', 'jids')
-                msg = msg.split(`@${val} `).join('')
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tags, tags, grup) {
+        const role = text.split(' ')[1]
+        const arrTagar = quotedPesan
+                       ? messages[0].message.extendedTextMessage.contextInfo.participant 
+                       : text.split(' ').filter(word => word.startsWith("@"))
+
+        const tag = tags.roles.find(roles => roles.name == role)
+        const jids = tag.jids.filter(word => !arrTagar.includes("@"+word.split("@")[0]))
+        const msg = tag.msg.split(" ").filter(word => !arrTagar.includes(word)).join(" ")
+
+        const filter = {
+            "title": tags.title,
+            "roles.name": role
+        }
+
+        const update = {
+            $set: {
+                "roles.$.jids": jids,
+                "roles.$.msg": msg
             }
+        }
+
+        await coll_tags.updateOne(filter, update).then(() => {
+            commands.get("reaction").execute(sock, messages, true)
         })
-        db.set(role, msg, 'msg')
-        commands.get("reaction").execute(sock, messages, true)
     }
 }
