@@ -7,11 +7,8 @@ const {
 const { Boom } = require("@hapi/boom");
 const fs = require('fs');
 const thisAPI = require("./functions/server.js")
-const { MongoClient } = require('mongodb');
 
 // require("http").createServer((_, res) => res.end("Uptime!")).listen(8080)
-const client = new MongoClient(process.env.uri);
-const database = client.db("whatsapp-bot-baileys")
 
 const commands = new Map();
 const files = fs.readdirSync(`./commands`).filter(file => file.endsWith('.js'))
@@ -74,11 +71,17 @@ async function connectToWhatsApp() {
                 let ada = false
                 for await (let c of commands) {
                     if (c[1].alias.includes(command) && !["ai", "reaction"].includes(command)) {
-                        commands.get(c[1].name).execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database)
+                        commands.get(c[1].name).execute(sock, messages, commands, senderNumber, text, quotedPesan)
                         ada = true
                         break
                     }
                 }
+                // commands.forEach(async c => {
+                //     if (c.alias.includes(command) && !["ai", "reaction"].includes(command)) {
+                //         commands.get(c.name).execute(sock, messages, commands, senderNumber, text, quotedPesan)
+                //         ada = true
+                //     }
+                // })
                 if (!ada) commands.get("reaction").execute(sock, messages, false)
                 await sock.readMessages([messages[0].key])
             }
@@ -86,7 +89,7 @@ async function connectToWhatsApp() {
                 incomingMessages.split(" ").forEach(tag => {
                     if (tag.includes(process.env.tag)) {
                         var text = `tag ${tag.substring(process.env.tag.length)}`
-                        commands.get('tag').execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database)
+                        commands.get('tag').execute(sock, messages, commands, senderNumber, text, quotedPesan)
                     }
                 })
                 await sock.readMessages([messages[0].key])
@@ -94,7 +97,7 @@ async function connectToWhatsApp() {
             else if (incomingMessages.startsWith(process.env.ai) && incomingMessages.length > 1) {
                 console.log(process.env.ai*10)
                 var text = incomingMessages.substring(process.env.ai.length)
-                commands.get('AI').execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database)
+                commands.get('AI').execute(sock, messages, commands, senderNumber, text, quotedPesan)
                 await sock.readMessages([messages[0].key])
             }
         }

@@ -22,7 +22,7 @@ module.exports = {
     name: "kbbi",
     description: "mencari arti kata (lema/sub lema)",
     alias: ["kbbi", "kbi", "ki", "k"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
         if (text.split(" ").length >= 2) {
             let kata = text.split(" ").splice(1).join(" ")
             cari(kata).then(async (result) => {

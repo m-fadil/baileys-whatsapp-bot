@@ -1,10 +1,9 @@
 module.exports = {
     name: "add_note",
     description: "menyimpan catatan",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, db) {
         if (text.split(" ").length >= 3) {
             let subjek = text.split(' ')[2]
-            
             if (!text.slice(10+subjek.length, text.length)) {
                 if (quotedPesan) {
                     let isi = messages[0].message.extendedTextMessage.contextInfo.quotedMessage.extendedTextMessage.text

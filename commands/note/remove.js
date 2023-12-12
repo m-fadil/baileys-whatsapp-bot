@@ -1,7 +1,7 @@
 module.exports = {
     name: "remove_note",
     description: "menghapus catatan",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, db) {
         if (text.split(" ").length >= 3) {
             let subjek = text.split(' ')[2]
             if (db.get('note').includes(subjek)){
