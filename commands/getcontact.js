@@ -6,7 +6,7 @@ module.exports = {
     name: "getcontact",
     description: "API getcontact",
     alias: ["getcontact", "gc"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
         if (text.split(" ").length >= 2) {
             let nomorTmp = text.split(" ").splice(1).join(" ")
             let nomor = ""

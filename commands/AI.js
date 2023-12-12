@@ -37,7 +37,7 @@ module.exports = {
     name: "AI",
     description: "chat dengan AI",
     alias: ["ai"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
         console.log("bismillah")
         if (senderNumber.includes("@g.us")) {
         var grup = await sock.groupMetadata(senderNumber);

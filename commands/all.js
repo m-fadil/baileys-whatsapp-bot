@@ -4,7 +4,7 @@ module.exports = {
     name: "all",
     description: "tag semua orang yang ada di grup",
     alias: ["all", "everyone"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan) {
         const isMessageFromGroup = senderNumber.includes("@g.us");
         
         if (!isMessageFromGroup) {
