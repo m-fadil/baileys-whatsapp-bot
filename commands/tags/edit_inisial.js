@@ -1,18 +1,20 @@
 module.exports = {
     name: "edit_inisial",
     description: "mengedit inisial",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, db) {
-        namaLama = text.toLowerCase().split(' ')[2]
-        namaBaru = text.toLowerCase().split(' ')[3]
-        if (db.get('tag').includes(namaLama)) {
-            let tempJids = db.get(namaLama, 'jids')
-            let tempMsg = db.get(namaLama, 'msg')
-            db.remove('tag', namaLama)
-            db.delete(namaLama)
-            db.push('tag', namaBaru)
-            db.set(namaBaru, {jids: tempJids, msg: tempMsg})
-            commands.get("reaction").execute(sock, messages, true)
-        }else{
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tags, tags) {
+        const namaLama = text.toLowerCase().split(' ')[2]
+        const namaBaru = text.toLowerCase().split(' ')[3]
+
+        const tag = tags.roles.find(roles => roles.name == namaLama)
+        if (tag) {
+            const filter = {"title": tags.title, "roles.name": namaLama}
+            const update = { $set: { "roles.$.name": namaBaru } };
+
+            await coll_tags.updateOne(filter, update).then(() => {
+                commands.get("reaction").execute(sock, messages, true)
+            })
+        }
+        else{
             await sock.sendMessage(
                 senderNumber,
                 {text: `tidak ada inisial ${namaLama}`},
