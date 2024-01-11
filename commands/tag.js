@@ -1,15 +1,16 @@
-const fs = require('fs');
+import fs from "fs"
 
-module.exports = {
+const Tag = {
     name: "tag",
     description: "menampilkan tags",
     alias: ["tag", "t"],
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
         const tagsCommand = new Map();
-        fs.readdirSync(`./commands/tags`).filter(file => file.endsWith('.js')).forEach(file => {
-            const command = require(`./tags/${file}`)
+        const files = fs.readdirSync(`./commands/tags`).filter(file => file.endsWith('.js'))
+        for (const file of files) {
+            const { default: command} = await import(`./tags/${file}`)
             tagsCommand.set(command.name, command)
-        });
+        }
 
         const isMessageFromGroup = senderNumber.includes("@g.us");
         if (isMessageFromGroup) {
@@ -83,3 +84,5 @@ module.exports = {
         }
     },
 }
+
+export default Tag

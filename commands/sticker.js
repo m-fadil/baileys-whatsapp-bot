@@ -1,6 +1,7 @@
-const { downloadMediaMessage } = require("@whiskeysockets/baileys");
-const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter')
-module.exports = {
+import { downloadMediaMessage } from "@whiskeysockets/baileys";
+import { Sticker, createSticker, StickerTypes } from "wa-sticker-formatter"
+
+const CreateSticker = {
     name: "sticker",
     description: "membuat sticker dari gambar",
     alias: ["sticker", "stiker", "s"],
@@ -65,3 +66,5 @@ module.exports = {
         }
     }
 }
+
+export default CreateSticker

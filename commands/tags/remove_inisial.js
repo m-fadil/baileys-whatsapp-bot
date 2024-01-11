@@ -1,4 +1,4 @@
-module.exports = {
+const RemoveInisial = {
     name: "remove_inisial",
     description: "menghapus inisial",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags) {
@@ -15,3 +15,5 @@ module.exports = {
         }
     }
 }
+
+export default RemoveInisial

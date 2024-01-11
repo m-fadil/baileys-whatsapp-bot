@@ -1,4 +1,4 @@
-module.exports = {
+const InisialAdd = {
     name: "inisial_add",
     description: "menambah anggota pada tag",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tag, tags, grup) {
@@ -35,3 +35,5 @@ module.exports = {
         })
     }
 }
+
+export default InisialAdd

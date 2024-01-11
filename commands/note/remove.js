@@ -1,4 +1,4 @@
-module.exports = {
+const RemoveNote = {
     name: "remove_note",
     description: "menghapus catatan",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_note, draft) {
@@ -23,3 +23,5 @@ module.exports = {
         }
     }
 }
+
+export default RemoveNote

@@ -1,15 +1,16 @@
-const fs = require('fs');
+import fs from "fs";
 
-module.exports = {
+const Note = {
     name: "note",
     description: "menyimpan catatan",
     alias: ["note"],
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
         const note = new Map();
-        fs.readdirSync(`./commands/note`).filter(file => file.endsWith('.js')).forEach(file => {
-            const command = require(`./note/${file}`)
+        const files = fs.readdirSync(`./commands/note`).filter(file => file.endsWith('.js'))
+        for (const file of files) {
+            const { default: command } = await import(`./note/${file}`)
             note.set(command.name, command)
-        });
+        }
         
         const coll_note = database.collection("note");
         const title = senderNumber.includes("@g.us") 
@@ -64,3 +65,5 @@ module.exports = {
         }
     }
 }
+
+export default Note

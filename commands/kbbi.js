@@ -1,24 +1,23 @@
-const fetch = require("node-fetch")
-const userAgents = require("../tools/user-agents.json")
+import userAgents from "../tools/user-agents.json" assert { type: 'json' };
+import axios from 'axios'
 
-const cari = async (keyword) => {
+async function cari(keyword) {
     if (!keyword) throw new Error("Provide the keyword/kata kunci!")
-    const response = await fetch(
-        `https://kbbi-api-zhirrr.vercel.app/api/kbbi?text=${keyword}`,
-        { headers: {
-                "User-Agent": userAgents[Math.floor(Math.random() * userAgents.length)],
-            },
-        }
-    )
-    if (!response.ok) {
-        throw new Error("Request failed with status: " + response.status)
+    const response = await axios.get(`https://kbbi-api-zhirrr.vercel.app/api/kbbi?text=${keyword}`, {
+        headers: {
+            'User-Agent': userAgents[Math.floor(Math.random() * userAgents.length)],
+        },
+    });
+
+    if (response.status < 200 || response.status >= 300) {
+        throw new Error('Request failed with status: ' + response.status);
     }
 
-    const data = await response.json()
-    return data
+    const data = response.data;
+    return data;
 }
 
-module.exports = {
+const Kbbi = {
     name: "kbbi",
     description: "mencari arti kata (lema/sub lema)",
     alias: ["kbbi", "kbi", "ki", "k"],
@@ -41,3 +40,5 @@ module.exports = {
         }
     }
 }
+
+export default Kbbi

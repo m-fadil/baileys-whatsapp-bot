@@ -1,4 +1,4 @@
-module.exports = {
+const EditInisial = {
     name: "edit_inisial",
     description: "mengedit inisial",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags) {
@@ -24,3 +24,5 @@ module.exports = {
         }
     }
 }
+
+export default EditInisial

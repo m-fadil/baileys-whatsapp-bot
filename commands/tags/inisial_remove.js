@@ -1,4 +1,4 @@
-module.exports = {
+const InisialRemove = {
     name: "inisial_remove",
     description: "menghapus anggota pada tag",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tag, tags, grup) {
@@ -28,3 +28,5 @@ module.exports = {
         })
     }
 }
+
+export default InisialRemove

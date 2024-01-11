@@ -1,4 +1,4 @@
-module.exports = {
+const Help = {
     name: "help",
     description: "menampilkan commands",
     alias: ["help", "h"],
@@ -63,3 +63,5 @@ Nomor pengirim = @me, @myself, @aku, @saya\n
         );
     }
 }
+
+export default Help

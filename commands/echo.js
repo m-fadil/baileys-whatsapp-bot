@@ -1,4 +1,4 @@
-module.exports = {
+const Echo = {
     name: "echo",
     description: "mengembalikan value yang dimasukkan",
     alias: ["echo", "print", "ec"],
@@ -12,3 +12,5 @@ module.exports = {
         );
     }
 }
+
+export default Echo

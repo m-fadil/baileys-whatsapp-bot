@@ -1,4 +1,4 @@
-module.exports = {
+const AddNote = {
     name: "add_note",
     description: "menyimpan catatan",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_note, draft) {
@@ -51,3 +51,5 @@ module.exports = {
         }
     }
 }
+
+export default AddNote

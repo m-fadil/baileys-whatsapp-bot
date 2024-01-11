@@ -1,4 +1,4 @@
-module.exports = {
+const Ping = {
     name: "ping",
     description: "ping",
     alias: ["ping", "p"],
@@ -13,3 +13,5 @@ module.exports = {
         );
     },
 }
+
+export default Ping

@@ -1,16 +1,17 @@
-require('dotenv').config()
-const UripGetContact = require('urip-getcontact');
+import "dotenv/config.js"
+import UripGetContact from "urip-getcontact"
+
 const getContact = new UripGetContact(process.env.gcToken, process.env.gcKey);
-``
-module.exports = {
+
+const Getcontact = {
     name: "getcontact",
     description: "API getcontact",
     alias: ["getcontact", "gc"],
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
         if (text.split(" ").length >= 2) {
-            let nomorTmp = text.split(" ").splice(1).join(" ")
+            let nomorTmp = text.split(" ").slice(1).join(" ")
             let nomor = ""
-            for (i of nomorTmp) {
+            for (const i of nomorTmp) {
                 if ((/\d/g).test(i)) {
                     nomor += `${i}`
                 }
@@ -18,7 +19,6 @@ module.exports = {
             if (!nomor.startsWith("0")) {
                 nomor = `+${nomor}`
             }
-            console.log(nomor)
             getContact
                 .checkNumber(nomor)
                 .then(async (data) => {
@@ -60,3 +60,5 @@ module.exports = {
         }
     }
 }
+
+export default Getcontact

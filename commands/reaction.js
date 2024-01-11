@@ -1,4 +1,4 @@
-module.exports = {
+const Reaction = {
     name: "reaction",
     description: "memberikan reaction",
     alias: ["reaction", "r"],
@@ -33,3 +33,5 @@ module.exports = {
         benar ? sendBenar() : sendSalah()
     },
 }
+
+export default Reaction

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,12 +19,10 @@
     "enmap": "^5.9.8",
     "express": "^4.18.2",
     "mongodb": "^6.3.0",
-    "node-fetch": "^2.6.11",
     "qrcode-terminal": "^0.12.0",
     "request": "^2.88.2",
     "simple-crypto-js": "^3.0.1",
     "urip-getcontact": "github:subekti404dev/urip-getcontact",
-    "wa-sticker-formatter": "^4.4.4",
-    "zlib": "^1.0.5"
+    "wa-sticker-formatter": "^4.4.4"
   }
 }

@@ -1,12 +1,11 @@
-require("dotenv").config()
-const express = require("express")
-var SimpleCrypto = require("simple-crypto-js").default
+import express from "express"
+import { SimpleCrypto } from "simple-crypto-js"
 
-module.exports = {
+const myServer = {
     async execute(sock) {
         const app = express()
         const db = new Map()
-        simpleCrypto = new SimpleCrypto(process.env.secret)
+        const simpleCrypto = new SimpleCrypto(process.env.secret)
         
         app.use(express.json())
         app.use(express.urlencoded({extended: true}))
@@ -104,3 +103,5 @@ module.exports = {
         }
     },
 }
+
+export default myServer

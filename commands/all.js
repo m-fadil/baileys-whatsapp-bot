@@ -1,6 +1,6 @@
-require('dotenv').config()
+import "dotenv/config.js"
 
-module.exports = {
+const All = {
     name: "all",
     description: "tag semua orang yang ada di grup",
     alias: ["all", "everyone"],
@@ -34,3 +34,5 @@ module.exports = {
         }
     },
 }
+
+export default All

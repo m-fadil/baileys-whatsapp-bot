@@ -1,4 +1,4 @@
-module.exports = {
+const Inisial = {
     name: "inisial",
     description: "tag anggota",
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tag, tags, grup) {
@@ -25,3 +25,5 @@ module.exports = {
         }
     }
 }
+
+export default Inisial

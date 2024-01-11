@@ -1,13 +1,9 @@
-require('dotenv').config()
-const {
-    default: makeWASocket,
-    DisconnectReason,
-    useMultiFileAuthState,
-} = require("@whiskeysockets/baileys");
-const { Boom } = require("@hapi/boom");
-const fs = require('fs');
-const thisAPI = require("./functions/server.js")
-const { MongoClient } = require('mongodb');
+import "dotenv/config.js"
+import makeWASocket, { DisconnectReason, useMultiFileAuthState } from "@whiskeysockets/baileys"
+import { Boom } from "@hapi/boom"
+import fs from "fs"
+import myServer from "./functions/server.js"
+import { MongoClient } from "mongodb"
 
 // require('express')().get('/', (_, res) => res.send('Uptime!')).listen(8080);
 const client = new MongoClient(process.env.uri);
@@ -16,7 +12,7 @@ const database = client.db("whatsapp-bot-baileys")
 const commands = new Map();
 const files = fs.readdirSync(`./commands`).filter(file => file.endsWith('.js'))
 for (const file of files) {
-	const command = require(`./commands/${file}`)
+	const { default: command } = await import(`./commands/${file}`)
 	commands.set(command.name, command)
 }
 
@@ -25,7 +21,7 @@ let running = false
 async function connectToWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState(process.env.folder);
     
-    const sock = makeWASocket({
+    const sock = makeWASocket.default({
         auth: state,
         printQRInTerminal: true,
         defaultQuertTimeoutMs: undefined
@@ -42,7 +38,7 @@ async function connectToWhatsApp() {
         }
         else if (connection === "open") {
             if (!running){
-                thisAPI.execute(sock)
+                myServer.execute(sock)
                 running = true
             }
             console.log("Koneksi tersambung!")

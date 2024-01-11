@@ -1,6 +1,6 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI }from "@google/generative-ai"
 
-module.exports = {
+const Ai = {
     name: "AI",
     description: "chat dengan AI",
     alias: ["ai"],
@@ -23,3 +23,5 @@ module.exports = {
         )
     },
 }
+
+export default Ai
