@@ -1,7 +1,7 @@
 module.exports = {
     name: "edit_inisial",
     description: "mengedit inisial",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tags, tags) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags) {
         const namaLama = text.toLowerCase().split(' ')[2]
         const namaBaru = text.toLowerCase().split(' ')[3]
 
@@ -10,7 +10,7 @@ module.exports = {
             const filter = {"title": tags.title, "roles.name": namaLama}
             const update = { $set: { "roles.$.name": namaBaru } };
 
-            await coll_tags.updateOne(filter, update).then(() => {
+            await coll_tag.updateOne(filter, update).then(() => {
                 commands.get("reaction").execute(sock, messages, true)
             })
         }

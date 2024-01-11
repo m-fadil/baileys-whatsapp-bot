@@ -1,7 +1,7 @@
 module.exports = {
     name: "inisial_add",
     description: "menambah anggota pada tag",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tags, tags, grup) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tag, tags, grup) {
         const role = text.split(' ')[1]
         const arrTagar = quotedPesan 
                        ? messages[0].message.extendedTextMessage.contextInfo.participant 
@@ -30,7 +30,7 @@ module.exports = {
             }
         }
         const filter = {"title": tags.title, "roles.name": role}
-        await coll_tags.updateOne(filter, update).then(() => {
+        await coll_tag.updateOne(filter, update).then(() => {
             commands.get("reaction").execute(sock, messages, true)
         })
     }

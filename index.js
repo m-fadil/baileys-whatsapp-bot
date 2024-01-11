@@ -9,7 +9,7 @@ const fs = require('fs');
 const thisAPI = require("./functions/server.js")
 const { MongoClient } = require('mongodb');
 
-// require("http").createServer((_, res) => res.end("Uptime!")).listen(8080)
+// require('express')().get('/', (_, res) => res.send('Uptime!')).listen(8080);
 const client = new MongoClient(process.env.uri);
 const database = client.db("whatsapp-bot-baileys")
 
@@ -19,6 +19,8 @@ for (const file of files) {
 	const command = require(`./commands/${file}`)
 	commands.set(command.name, command)
 }
+
+let running = false
 
 async function connectToWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState(process.env.folder);
@@ -39,7 +41,10 @@ async function connectToWhatsApp() {
             }
         }
         else if (connection === "open") {
-            thisAPI.execute(sock)
+            if (!running){
+                thisAPI.execute(sock)
+                running = true
+            }
             console.log("Koneksi tersambung!")
         }
     });
@@ -92,7 +97,6 @@ async function connectToWhatsApp() {
                 await sock.readMessages([messages[0].key])
             }
             else if (incomingMessages.startsWith(process.env.ai) && incomingMessages.length > 1) {
-                console.log(process.env.ai*10)
                 var text = incomingMessages.substring(process.env.ai.length)
                 commands.get('AI').execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database)
                 await sock.readMessages([messages[0].key])

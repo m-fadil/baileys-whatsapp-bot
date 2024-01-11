@@ -1,7 +1,7 @@
 module.exports = {
     name: "inisial_remove",
     description: "menghapus anggota pada tag",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tags, tags, grup) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tag, tags, grup) {
         const role = text.split(' ')[1]
         const arrTagar = quotedPesan
                        ? messages[0].message.extendedTextMessage.contextInfo.participant 
@@ -23,7 +23,7 @@ module.exports = {
             }
         }
 
-        await coll_tags.updateOne(filter, update).then(() => {
+        await coll_tag.updateOne(filter, update).then(() => {
             commands.get("reaction").execute(sock, messages, true)
         })
     }

@@ -3,8 +3,8 @@ module.exports = {
     description: "ping",
     alias: ["ping", "p"],
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
-        const tags = database.collection("tags")
-        await tags.deleteMany({})
+        // const db = database.collection("notes")
+        // await db.deleteMany({})
         await sock.sendMessage(
             senderNumber,
             { text: `pong`},

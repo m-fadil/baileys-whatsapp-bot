@@ -1,7 +1,7 @@
 module.exports = {
     name: "add_inisial",
     description: "menambahkan inisial tag dan anggotanya",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tags, tags, grup) {
+    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags, grup) {
         const role = text.split(' ')[2]
         const arrTagar = text.split(' ').slice(3, text.length).join('')
 
@@ -36,7 +36,7 @@ module.exports = {
                     }
                 }
             }
-            await coll_tags.updateOne({"title": tags.title}, data).then(() => {
+            await coll_tag.updateOne({"title": tags.title}, data).then(() => {
                 commands.get("reaction").execute(sock, messages, true)
             })
         }
