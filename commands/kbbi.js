@@ -1,7 +1,9 @@
-import userAgents from "../tools/user-agents.json" assert { type: 'json' };
-import axios from 'axios'
+import axios from "axios"
+import fs from "fs"
 
 async function cari(keyword) {
+    const userAgents = JSON.parse(fs.readFileSync("./tools/user-agents.json", "utf8"));
+    
     if (!keyword) throw new Error("Provide the keyword/kata kunci!")
     const response = await axios.get(`https://kbbi-api-zhirrr.vercel.app/api/kbbi?text=${keyword}`, {
         headers: {

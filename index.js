@@ -1,11 +1,11 @@
 import "dotenv/config.js"
+import "./functions/keep_alive.js"
 import makeWASocket, { DisconnectReason, useMultiFileAuthState } from "@whiskeysockets/baileys"
-import { Boom } from "@hapi/boom"
-import fs from "fs"
 import myServer from "./functions/server.js"
 import { MongoClient } from "mongodb"
+import { Boom } from "@hapi/boom"
+import fs from "fs"
 
-// require('express')().get('/', (_, res) => res.send('Uptime!')).listen(8080);
 const client = new MongoClient(process.env.uri);
 const database = client.db("whatsapp-bot-baileys")
 
