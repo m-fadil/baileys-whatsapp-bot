@@ -5,6 +5,7 @@ import myServer from "./functions/server.js"
 import { MongoClient } from "mongodb"
 import { Boom } from "@hapi/boom"
 import fs from "fs"
+import { rimraf } from "rimraf"
 
 const client = new MongoClient(process.env.uri);
 const database = client.db("whatsapp-bot-baileys")
@@ -17,6 +18,7 @@ for (const file of files) {
 }
 
 let running = false
+let runningTime = 0
 
 async function connectToWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState(process.env.folder);
@@ -32,8 +34,23 @@ async function connectToWhatsApp() {
         if (connection === "close") {
             const shouldReconnect = (lastDisconnect.error = Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
             console.log("Koneksi terputus karena ", lastDisconnect.error, ", hubugkan kembali!", shouldReconnect);
+            running = false
             if (shouldReconnect) {
                 connectToWhatsApp();
+            }
+            if (runningTime == 0) {
+                const _ = setInterval(() => {
+                    runningTime++
+                    if (running) {
+                        runningTime = 0
+                        clearInterval(_)
+                    }
+                    if (runningTime == 10) {
+                        rimraf("./auth")
+                        runningTime = 0
+                        clearInterval(_)
+                    }
+                }, 1000)
             }
         }
         else if (connection === "open") {
