@@ -18,7 +18,6 @@ for (const file of files) {
 }
 
 let running = false
-let runningTime = 0
 
 async function connectToWhatsApp() {
     const { state, saveCreds } = await useMultiFileAuthState(process.env.folder);
@@ -37,20 +36,6 @@ async function connectToWhatsApp() {
             running = false
             if (shouldReconnect) {
                 connectToWhatsApp();
-            }
-            if (runningTime == 0) {
-                const _ = setInterval(() => {
-                    runningTime++
-                    if (running) {
-                        runningTime = 0
-                        clearInterval(_)
-                    }
-                    if (runningTime == 10) {
-                        rimraf("./auth")
-                        runningTime = 0
-                        clearInterval(_)
-                    }
-                }, 1000)
             }
         }
         else if (connection === "open") {

@@ -22,7 +22,7 @@ function startNodeApp() {
 
   // Tampilkan output dari child process
   child.stdout.on('data', (data) => {
-    console.log(`Output: ${data}`);
+    console.log(`Output:\n${data}`);
   });
 
   // Tampilkan error dari child process
