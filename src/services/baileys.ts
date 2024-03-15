@@ -31,10 +31,6 @@ export class Baileys {
         this.sock.ev.on("creds.update", saveCreds);
     }
 
-    setCredsUpdateHanlder = (args: () => Promise<void>) => {
-        this.sock.ev.on("creds.update", args);
-    };
-
     setConnectionUpdateHandler = () => {
         this.sock.ev.on(
             "connection.update",
