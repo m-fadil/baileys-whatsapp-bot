@@ -6,12 +6,12 @@ const Help = {
     alias: ["h"],
     isGroup: true,
     async execute(args) {
-        const { sock, messages } = args
+        const { sock, messages, remoteJid, commands, pesan } = args
+        const [ _, command ] = pesan.split(" ")
 
         var help = ""
         var ada = false
-        if (text.split(" ").length >= 2) {
-            let command = text.split(" ")[1]
+        if (command) {
             commands.forEach(async c => {
                 if (c.alias.includes(command)) {
                     help = `*command*: ${c.name}\n*alias*: ${c.alias.join(", ")}\n*deskripsi*: ${c.description}`

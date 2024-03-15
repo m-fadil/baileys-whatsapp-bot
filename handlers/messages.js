@@ -16,16 +16,16 @@ async function Messages(args) {
 	/**
 	 * @type {String}
 	 */
-	const pesanDatang = messages.message.extendedTextMessage?.text || messages.message.conversation;
+	const pesanDatang = messages.message.extendedTextMessage?.text || messages.message.imageMessage?.caption || messages.message.conversation;
 
-    if (pesanDatang.startsWith("/")) {
+    if (pesanDatang.startsWith(process.env.command)) {
         const pesan = pesanDatang.substring(1)
         const [ perintah ] = pesan.toLowerCase().split(" ")
 
         const fitur = Array.from(commands.values()).find(command => command.name == perintah || command.alias.includes(perintah))
 
         if (fitur) {
-            fitur.execute({ ...args, Reaction, remoteJid, pesan })
+            fitur.execute({ ...args, Reaction, remoteJid, commands, pesan })
         }
 
         await sock.readMessages([messages.key])

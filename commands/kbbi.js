@@ -22,15 +22,17 @@ async function cari(keyword) {
 const Kbbi = {
     name: "kbbi",
     description: "mencari arti kata (lema/sub lema)",
-    alias: ["kbbi", "kbi", "ki", "k"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
-        if (text.split(" ").length >= 2) {
-            let kata = text.split(" ").splice(1).join(" ")
+    alias: ["kbi", "ki", "k"],
+    async execute(args) {
+        const { sock, messages, remoteJid, Reaction, pesan } = args
+        const [ _, ...kata ] = pesan.split(" ")
+
+        if (kata.length == 1) {
             cari(kata).then(async (result) => {
                 await sock.sendMessage(
-                    senderNumber,
+                    remoteJid,
                     { text: `*lema:* ${result.lema}\n*arti:* ${result.arti.join(", \n")}` },
-                    { quoted: messages[0] },
+                    { quoted: messages },
                     1000
                 );
             }).catch(err => {
@@ -38,7 +40,7 @@ const Kbbi = {
             })
         }
         else {
-            commands.get("reaction").execute(sock, messages, false)
+            Reaction(args, false)
         }
     }
 }
