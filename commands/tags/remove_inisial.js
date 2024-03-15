@@ -1,16 +1,21 @@
 const RemoveInisial = {
-    name: "remove_inisial",
+    name: "remove",
     description: "menghapus inisial",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags) {
-        let role = text.split(' ')[2]
-        const filter = {"title": tags.title}
-        const updated = {
-            $pull: { "roles": { "name": role } }
-        }
+    alias: ["delete", "del", "rm", "r"],
+    async execute(args) {
+        const { pesan, remoteJid, Reaction, coll_tag, roles } = args
+        const [ _, __, ...inisials ] = pesan.split(" ")
 
-        if (tags.roles.find(roles => roles.name == role)) {
-            await coll_tag.updateOne(filter, updated).then(() => {
-                commands.get("reaction").execute(sock, messages, true)
+        const delInisial = inisials.filter(inisial => roles.includes(inisial))
+
+        if (delInisial.length != 0) {
+            const filter = {"title": remoteJid}
+            const updated = {
+                $pull: { "roles": { "name": { $in: delInisial } } }
+            }
+
+            await coll_tag.updateMany(filter, updated).then(() => {
+                Reaction(args, true)
             })
         }
     }

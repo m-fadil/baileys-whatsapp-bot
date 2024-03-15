@@ -1,14 +1,15 @@
 const Ping = {
     name: "ping",
     description: "ping",
-    alias: ["ping", "p"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
-        // const db = database.collection("notes")
-        // await db.deleteMany({})
+    alias: ["p"],
+    private: false,
+    async execute(args) {
+        const { sock, messages } = args
+
         await sock.sendMessage(
-            senderNumber,
+            messages.key.remoteJid,
             { text: `pong`},
-            { quoted: messages[0] },
+            { quoted: messages },
             1000
         );
     },

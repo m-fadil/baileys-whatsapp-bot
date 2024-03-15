@@ -1,38 +1,25 @@
-import "dotenv/config.js"
+import "dotenv/config.js";
 
 const All = {
-    name: "all",
-    description: "tag semua orang yang ada di grup",
-    alias: ["all", "everyone"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
-        const isMessageFromGroup = senderNumber.includes("@g.us");
-        
-        if (!isMessageFromGroup) {
-            await sock.sendMessage(
-                senderNumber,
-                { text: `Anda tidak sedang berada di grup`},
-                { quoted: messages[0] },
-                1000
-            );
-        } else {
-            const jids = []
-            let msg = ""
-            var grup = await sock.groupMetadata(senderNumber);
-            grup['participants'].map( usr => {
-                    if (!usr.id.includes(process.env.nomor)) {
-                        msg += '@' + usr.id.split('@')[0] + ' ';
-                        jids.push(usr.id.replace('c.us', 's.whatsapp.net'));
-                    }
-                }
-            );
-            await sock.sendMessage(
-                senderNumber,
-                {text: msg, mentions: jids},
-                {quoted: messages[0]},
-                1000
-            );
-        }
-    },
-}
+	name: "all",
+	description: "tag semua orang yang ada di grup",
+	alias: ["everyone"],
+	async execute(args) {
+		const { sock, messages, remoteJid } = args;
 
-export default All
+		const isMessageFromGroup = remoteJid.includes("@g.us");
+
+		if (!isMessageFromGroup) {
+			await sock.sendMessage(remoteJid, { text: `Anda tidak sedang berada di grup` }, { quoted: messages[0] }, 1000);
+		} else {
+			const grup = await sock.groupMetadata(remoteJid);
+
+			const jids = grup.participants.map((user) => user.id).filter((user) => !user.includes(process.env.nomor));
+			const msg = jids.map((jid) => "@" + jid.split("@")[0]).join(" ");
+
+			await sock.sendMessage(remoteJid, { text: msg, mentions: jids }, { quoted: messages }, 1000);
+		}
+	},
+};
+
+export default All;

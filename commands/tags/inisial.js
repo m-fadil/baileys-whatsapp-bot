@@ -1,27 +1,31 @@
+import InisialAdd from "./inisial/inisial_add.js"
+import InisialRemove from "./inisial/inisial_remove.js"
+
 const Inisial = {
     name: "inisial",
     description: "tag anggota",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, tagsCommand, coll_tag, tags, grup) {
-        const role = (text.split(' ')[1])
+    alias: [],
+    async execute(args) {
+        const { sock, messages, Reaction, remoteJid, pesan, tags } = args
+        const [ _, inisial, perintah, ...at ] = pesan.split(" ")
 
-        if (text.toLowerCase().split(' ')[2] == 'add') {
-            tagsCommand.get("inisial_add").execute(...arguments)
+        if (perintah == 'add') {
+            InisialAdd.execute(args, inisial, at)
         }
-        else if (text.toLowerCase().split(' ')[2] == 'remove' || text.toLowerCase().split(' ')[2] == 'del') {
-            tagsCommand.get("inisial_remove").execute(...arguments)
+        else if (perintah == 'remove' || perintah == 'del') {
+            InisialRemove.execute(args, inisial, at)
         }
-        else if (text.split(' ').length == 2 && tags.roles.find(roles => roles.name == role)) {
-            const tag = tags.roles.find(roles => roles.name == role)
+        else if (inisial) {
+            const tag = tags.roles.find(role => role.name == inisial)
 
             await sock.sendMessage(
-                senderNumber,
+                remoteJid,
                 {text: tag.msg, mentions: tag.jids},
-                {quoted: messages[0]},
-                1000
+                {quoted: messages}
             );
         }
         else {
-            commands.get("reaction").execute(sock, messages, false)
+            Reaction(args, false)
         }
     }
 }

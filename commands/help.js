@@ -1,8 +1,13 @@
+//masih belum
+
 const Help = {
     name: "help",
     description: "menampilkan commands",
-    alias: ["help", "h"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    alias: ["h"],
+    isGroup: true,
+    async execute(args) {
+        const { sock, messages } = args
+
         var help = ""
         var ada = false
         if (text.split(" ").length >= 2) {

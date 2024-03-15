@@ -1,6 +1,7 @@
 const EditInisial = {
-    name: "edit_inisial",
+    name: "edit",
     description: "mengedit inisial",
+    alias: ["e"],
     async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags) {
         const namaLama = text.toLowerCase().split(' ')[2]
         const namaBaru = text.toLowerCase().split(' ')[3]

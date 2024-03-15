@@ -1,53 +1,40 @@
 const TagInisial = {
-    name: "add_inisial",
-    description: "menambahkan inisial tag dan anggotanya",
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags, grup) {
-        const role = text.split(' ')[2]
-        const arrTagar = text.split(' ').slice(3, text.length).join('')
+	name: "add",
+	description: "menambahkan inisial tag dan anggotanya",
+	alias: ["new", "a"],
+	async execute(args) {
+		const { sock, messages, pesan, Reaction, coll_tag, remoteJid, roles, grup } = args;
+        const [ _, __, inisial, ...at ] = pesan.split(" ")
 
-        if (['add', 'edit', 'remove', 'del'].includes(role)) {
-            commands.get("reaction").execute(sock, messages, false)
-        }
-        else if (!tags.roles.find(roles => roles.name == role)) {
-            const jids = []
-            let msg = ''
-            if (quotedPesan) {
-                msg += '@' + messages[0].message.extendedTextMessage.contextInfo.participant.split('@')[0] + ' ';
-                jids.push(messages[0].message.extendedTextMessage.contextInfo.participant.replace('c.us', 's.whatsapp.net'))
-            }
-            else {
-                arrTagar.split('@').forEach(val => {
-                    grup['participants'].map(
-                        async (usr) => {
-                            if (usr.id.includes(val.replace(/\D/g, '')) && val.replace(/\D/g, '') != '') {
-                                msg += '@' + usr.id.split('@')[0] + ' ';
-                                jids.push(usr.id.replace('c.us', 's.whatsapp.net'));
-                            }
-                        }
-                    );
-                })
-            }
-            const data = {
-                $push: {
-                    "roles": {
-                        name: role,
-                        jids: jids,
-                        msg: msg
-                    }
-                }
-            }
-            await coll_tag.updateOne({"title": tags.title}, data).then(() => {
-                commands.get("reaction").execute(sock, messages, true)
-            })
-        }
-        else {
-            await sock.sendMessage(
-                senderNumber,
-                {text: `inisial ${role} sudah ada`},
-                1000
-            );
-        }
-    }
-}
+		/**
+		 * nantinya diganti agar tidak perlu menggunakan if ['add', 'edit', 'remove', 'del'] agar bisa seleksi command
+		 */
+		if (["add", "edit", "remove", "del"].includes(inisial)) {
+			Reaction(args, false);
+		} else if (!roles.includes(inisial)) {
+			/**
+			 * nanti bisa ditambahkan quotedPesan yang seblumnya ada ya!!
+			 */
+			const incomeNum = at.map((str) => str.substring(1)).filter((num) => num.match(/^\d+$/));
+			const jids = grup.participants.map((user) => user.id).filter((num) => incomeNum.includes(num.split("@")[0]));
+			const msg = jids.map((jid) => "@" + jid.split("@")[0]).join(" ");
 
-export default TagInisial
+			const data = {
+				$push: {
+					roles: {
+						name: inisial,
+						jids: jids,
+						msg: msg,
+					},
+				},
+			};
+			await coll_tag.updateOne({ title: remoteJid }, data).then(() => {
+				Reaction(args, true);
+			});
+		} else {
+			await sock.sendMessage(remoteJid, { text: `inisial ${inisial} sudah ada` }, { quoted: messages });
+		}
+	},
+};
+
+export default TagInisial;

@@ -4,21 +4,23 @@ const Ai = {
     name: "AI",
     description: "chat dengan AI",
     alias: ["ai"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
+    async execute(args) {
+        const { sock, messages, remoteJid, pesan } = args
+
         const genAI = new GoogleGenerativeAI(process.env.palmApiKey);
 
         const model = genAI.getGenerativeModel({ model: "gemini-pro"});
 
-        const prompt = text
+        const prompt = pesan
 
         const result = await model.generateContent(prompt);
-        const response = await result.response;
+        const response = result.response;
         const answer = response.text();
 
         await sock.sendMessage(
-            senderNumber,
+            remoteJid,
             {text: answer},
-            {quoted: messages[0]},
+            {quoted: messages},
             1000
         )
     },
