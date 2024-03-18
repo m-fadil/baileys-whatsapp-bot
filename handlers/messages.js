@@ -36,69 +36,21 @@ async function Messages(args) {
 		const { tags, roles } = await getTags(args)
 		const incomeTags = pesanDatang.split(" ").filter(teks => teks.includes(process.env.tag))
 		
-		const inisials = incomeTags.forEach(e => e.includes())
+		const inisials = incomeTags.map(tag => roles.find(role => tag.includes(role)))
 		
 		for (const inisial of inisials) {
-
-			console.log(inisial)
-			// const tag = tags.roles.find(role => role.name == inisial)
-
-            // await sock.sendMessage(
-            //     remoteJid,
-            //     {text: `*${inisial}*\n${tag.msg}`, mentions: tag.jids}
-            // );
-			// await new Promise(resolve => setTimeout(resolve, 2000))
+			if (inisial) {
+				const tag = tags.roles.find(role => role.name == inisial)
+				
+				await sendTyping(args).then(async () => {
+					await sock.sendMessage(
+						remoteJid,
+						{text: `*${inisial}*\n${tag.msg}`, mentions: tag.jids}
+					);
+				})
+			}
 		}
 	}
-	// const senderNumber = messages[0].key.remoteJid;
-	// const nomorPengirim = (messages[0].key.participant == undefined) ? messages[0].key.remoteJid.split('@')[0] : messages[0].key.participant.split('@')[0]
-	// let incomingMessages = messages[0].message.conversation;
-	// let quotedPesan = false
-	// try {
-	//     if (messages[0].message.hasOwnProperty('extendedTextMessage')) {
-	//         incomingMessages = messages[0].message.extendedTextMessage.text;
-	//         quotedPesan = messages[0].message.extendedTextMessage.contextInfo.hasOwnProperty('quotedMessage')
-	//     }
-	//     else if (messages[0].message.hasOwnProperty('imageMessage')) {
-	//         incomingMessages = messages[0].message.imageMessage.caption;
-	//     }
-	// } catch (err) {
-	// }
-
-	// if (incomingMessages.startsWith(process.env.command)) {
-	//     let text = incomingMessages.substring(process.env.command.length)
-	//     let command = text.toLowerCase().split(' ')[0]
-	//     let ident = ['@me', '@myself', '@saya', '@aku']
-	//     ident.forEach(val => {
-	//         if (text.includes(val)) {
-	//             text = text.split(val).join(`@${nomorPengirim}`)
-	//         }
-	//     })
-	//     let ada = false
-	//     for await (let c of commands) {
-	//         if (c[1].alias.includes(command) && !["ai", "reaction"].includes(command)) {
-	//             commands.get(c[1].name).execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database)
-	//             ada = true
-	//             break
-	//         }
-	//     }
-	//     if (!ada) commands.get("reaction").execute(sock, messages, false)
-	//     await sock.readMessages([messages[0].key])
-	// }
-	// else if (incomingMessages.includes(process.env.tag)) {
-	//     incomingMessages.split(" ").forEach(tag => {
-	//         if (tag.includes(process.env.tag)) {
-	//             var text = `tag ${tag.substring(process.env.tag.length)}`
-	//             commands.get('tag').execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database)
-	//         }
-	//     })
-	//     await sock.readMessages([messages[0].key])
-	// }
-	// else if (incomingMessages.startsWith(process.env.ai) && incomingMessages.length > 1) {
-	//     var text = incomingMessages.substring(process.env.ai.length)
-	//     commands.get('AI').execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database)
-	//     await sock.readMessages([messages[0].key])
-	// }
 }
 
 export default Messages;

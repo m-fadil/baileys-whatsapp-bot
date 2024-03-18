@@ -13,7 +13,7 @@ const Tag = {
 	alias: ["t", "tg"],
 	private: false,
 	async execute(args) {
-		const { sock, messages, getTags, remoteJid, pesan, database } = args;
+		const { sock, messages, getTags, remoteJid, pesan, sendTyping } = args;
 
 		/**
 		 * hapus jika sidah benar

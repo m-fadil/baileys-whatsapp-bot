@@ -9,3 +9,4 @@
 /package-lock.json
 /testcase.md
 *.deprecated
+baileys_store_multi.json

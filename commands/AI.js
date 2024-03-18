@@ -5,7 +5,7 @@ const Ai = {
     description: "chat dengan AI",
     alias: ["ai"],
     async execute(args) {
-        const { sock, messages, remoteJid, pesan } = args
+        const { sock, messages, remoteJid, pesan, sendTyping } = args
 
         const genAI = new GoogleGenerativeAI(process.env.palmApiKey);
 

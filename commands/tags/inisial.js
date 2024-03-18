@@ -6,7 +6,7 @@ const Inisial = {
     description: "tag anggota",
     alias: [],
     async execute(args) {
-        const { sock, Reaction, remoteJid, pesan, tags } = args
+        const { sock, Reaction, remoteJid, pesan, tags, sendTyping } = args
         const [ _, inisial, perintah, ...at ] = pesan.split(" ")
 
         if (perintah == 'add') {

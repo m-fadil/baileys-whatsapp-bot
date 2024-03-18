@@ -6,7 +6,7 @@ const Help = {
     alias: ["h"],
     isGroup: true,
     async execute(args) {
-        const { sock, messages, remoteJid, commands, pesan } = args
+        const { sock, messages, remoteJid, commands, pesan, sendTyping } = args
         const [ _, command ] = pesan.split(" ")
 
         var help = ""

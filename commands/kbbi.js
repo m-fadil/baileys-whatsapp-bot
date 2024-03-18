@@ -24,7 +24,7 @@ const Kbbi = {
     description: "mencari arti kata (lema/sub lema)",
     alias: ["kbi", "ki", "k"],
     async execute(args) {
-        const { sock, messages, remoteJid, Reaction, pesan } = args
+        const { sock, messages, remoteJid, Reaction, pesan, sendTyping } = args
         const [ _, ...kata ] = pesan.split(" ")
 
         if (kata.length == 1) {

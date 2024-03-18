@@ -7,7 +7,7 @@ const Getcontact = {
 	description: "API getcontact",
 	alias: ["gc"],
 	async execute(args) {
-		const { sock, messages, remoteJid, pesan } = args;
+		const { sock, messages, remoteJid, pesan, sendTyping } = args;
 		const [_, ...incomeNomor] = pesan.split(" ");
 
 		if (incomeNomor) {

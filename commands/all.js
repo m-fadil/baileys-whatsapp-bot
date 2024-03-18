@@ -5,7 +5,7 @@ const All = {
 	description: "tag semua orang yang ada di grup",
 	alias: ["everyone"],
 	async execute(args) {
-		const { sock, messages, remoteJid } = args;
+		const { sock, messages, remoteJid, sendTyping } = args;
 
 		const isMessageFromGroup = remoteJid.includes("@g.us");
 

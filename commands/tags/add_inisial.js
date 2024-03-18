@@ -3,7 +3,7 @@ const TagInisial = {
 	description: "menambahkan inisial tag dan anggotanya",
 	alias: ["new", "a"],
 	async execute(args) {
-		const { sock, messages, pesan, Reaction, coll_tag, remoteJid, roles, grup } = args;
+		const { sock, messages, pesan, Reaction, coll_tag, remoteJid, roles, grup, sendTyping } = args;
         const [ _, __, inisial, ...at ] = pesan.split(" ")
 
 		/**
