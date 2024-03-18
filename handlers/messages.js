@@ -50,6 +50,7 @@ async function Messages(args) {
 				})
 			}
 		}
+        await sock.readMessages([messages.key])
 	}
 }
 
