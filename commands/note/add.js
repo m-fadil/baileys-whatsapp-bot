@@ -24,12 +24,14 @@ const AddNote = {
                 }
             }
             else {
-                await sock.sendMessage(
-                    senderNumber,
-                    {text: `subjek ${subjek} sudah ada`},
-                    {quoted: messages[0]},
-                    1000
-                );
+                await sendTyping(args).then(async () => {
+                    await sock.sendMessage(
+                        senderNumber,
+                        {text: `subjek ${subjek} sudah ada`},
+                        {quoted: messages[0]},
+                        1000
+                    );
+                })
             }
         }
         else {

@@ -16,12 +16,14 @@ const EditInisial = {
             })
         }
         else{
-            await sock.sendMessage(
-                senderNumber,
-                {text: `tidak ada inisial ${namaLama}`},
-                {quoted: messages[0]},
-                1000
-            );
+            await sendTyping(args).then(async () => {
+                await sock.sendMessage(
+                    senderNumber,
+                    {text: `tidak ada inisial ${namaLama}`},
+                    {quoted: messages[0]},
+                    1000
+                );
+            })
         }
     }
 }

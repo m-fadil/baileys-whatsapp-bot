@@ -29,12 +29,13 @@ const Kbbi = {
 
         if (kata.length == 1) {
             cari(kata).then(async (result) => {
-                await sock.sendMessage(
-                    remoteJid,
-                    { text: `*lema:* ${result.lema}\n*arti:* ${result.arti.join(", \n")}` },
-                    { quoted: messages },
-                    1000
-                );
+                await sendTyping(args).then(async () => {
+                    await sock.sendMessage(
+                        remoteJid,
+                        { text: `*lema:* ${result.lema}\n*arti:* ${result.arti.join(", \n")}` },
+                        { quoted: messages }
+                    );
+                })
             }).catch(err => {
                 console.log(err)
             })

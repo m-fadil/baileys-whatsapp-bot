@@ -10,14 +10,18 @@ const All = {
 		const isMessageFromGroup = remoteJid.includes("@g.us");
 
 		if (!isMessageFromGroup) {
-			await sock.sendMessage(remoteJid, { text: `Anda tidak sedang berada di grup` }, { quoted: messages[0] }, 1000);
+			await sendTyping(args).then(async () => {
+				await sock.sendMessage(remoteJid, { text: `Anda tidak sedang berada di grup` }, { quoted: messages[0] }, 1000);
+			})
 		} else {
 			const grup = await sock.groupMetadata(remoteJid);
 
 			const jids = grup.participants.map((user) => user.id).filter((user) => !user.includes(process.env.nomor));
 			const msg = jids.map((jid) => "@" + jid.split("@")[0]).join(" ");
 
-			await sock.sendMessage(remoteJid, { text: msg, mentions: jids }, { quoted: messages }, 1000);
+			await sendTyping(args).then(async () => {
+				await sock.sendMessage(remoteJid, { text: msg, mentions: jids }, { quoted: messages }, 1000);
+			})
 		}
 	},
 };

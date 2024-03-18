@@ -32,7 +32,9 @@ const TagInisial = {
 				Reaction(args, true);
 			});
 		} else {
-			await sock.sendMessage(remoteJid, { text: `inisial ${inisial} sudah ada` }, { quoted: messages });
+			await sendTyping(args).then(async () => {
+				await sock.sendMessage(remoteJid, { text: `inisial ${inisial} sudah ada` }, { quoted: messages });
+			})
 		}
 	},
 };

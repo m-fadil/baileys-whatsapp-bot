@@ -6,7 +6,7 @@ const Inisial = {
     description: "tag anggota",
     alias: [],
     async execute(args) {
-        const { sock, messages, Reaction, remoteJid, pesan, tags } = args
+        const { sock, Reaction, remoteJid, pesan, tags } = args
         const [ _, inisial, perintah, ...at ] = pesan.split(" ")
 
         if (perintah == 'add') {
@@ -18,11 +18,12 @@ const Inisial = {
         else if (inisial) {
             const tag = tags.roles.find(role => role.name == inisial)
 
-            await sock.sendMessage(
-                remoteJid,
-                {text: tag.msg, mentions: tag.jids},
-                {quoted: messages}
-            );
+            await sendTyping(args).then(async () => {
+                await sock.sendMessage(
+                    remoteJid,
+                    {text: `*${inisial}*\n${tag.msg}`, mentions: tag.jids}
+                );
+            })
         }
         else {
             Reaction(args, false)

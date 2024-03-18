@@ -13,32 +13,21 @@ const Tag = {
 	alias: ["t", "tg"],
 	private: false,
 	async execute(args) {
-		const { sock, messages, remoteJid, pesan, database } = args;
+		const { sock, messages, getTags, remoteJid, pesan, database } = args;
 
 		/**
 		 * hapus jika sidah benar
 		 */
 		const isMessageFromGroup = remoteJid.includes("@g.us");
 		if (isMessageFromGroup) {
-			const grup = await sock.groupMetadata(remoteJid);
-			const coll_tag = database.collection("tag");
-
-			const tags = await coll_tag.findOne({ title: grup.id }).then(async (result) => {
-				if (!result) {
-					const data = {
-						title: grup.id,
-						roles: [],
-					};
-					await coll_tag.insertOne(data);
-				}
-				return await coll_tag.findOne({ title: grup.id });
-			});
-
-            const roles = tags.roles.map((role) => role.name);
+			const dbTags = await getTags(args)
+			const { roles } = dbTags
 
 			if (pesan.split(" ").length == 1) {
 				const msg = roles.length <= 0 ? "belum ada tag yang ditambahkan" : roles.join("\n");
-				await sock.sendMessage(remoteJid, { text: msg }, { quoted: messages });
+				await sendTyping(args).then(async () => {
+					await sock.sendMessage(remoteJid, { text: msg }, { quoted: messages });
+				})
 			}
             else {
                 const [ _, perintah ] = pesan.split(" ")
@@ -46,10 +35,10 @@ const Tag = {
                 const fitur = [ ...tagsCommand.values() ].find(command => command.name == perintah || command.alias.includes(perintah))
 
                 if (fitur) {
-                    fitur.execute({ ...args, grup, coll_tag, tags, roles })
+                    fitur.execute({ ...args, ...dbTags })
                 }
 				else if (roles.includes(perintah)) {
-					tagsCommand.get("inisial").execute({ ...args, grup, coll_tag, tags })
+					tagsCommand.get("inisial").execute({ ...args, ...dbTags })
 				}
 
                 // if (text.toLowerCase().split(' ')[1] == 'add') {

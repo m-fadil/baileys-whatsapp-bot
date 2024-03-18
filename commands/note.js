@@ -34,12 +34,14 @@ const Note = {
             const msg = draft.notes.length <= 0
                       ? 'belum ada note yang ditambahkan'
                       : draft.notes.map((note) => note.subject).join('\n')
-            await sock.sendMessage(
-                senderNumber,
-                {text: msg},
-                {quoted: messages[0]},
-                1000
-            );
+            await sendTyping(args).then(async () => {
+                await sock.sendMessage(
+                    senderNumber,
+                    {text: msg},
+                    {quoted: messages[0]},
+                    1000
+                );
+            })
         }
         else if (text.toLowerCase().split(' ')[1] == 'add') {
             note.get("add_note").execute(...arguments, coll_note, draft)
@@ -49,12 +51,14 @@ const Note = {
         }
         else if(draft.notes.find(notes => notes.subject == text.split(' ')[1])) {
             if (text.split(" ").length == 2) {
-                await sock.sendMessage(
-                    senderNumber,
-                    {text: draft.notes.find(notes => notes.subject == text.split(' ')[1]).text},
-                    {quoted: messages[0]},
-                    1000
-                );
+                await sendTyping(args).then(async () => {
+                    await sock.sendMessage(
+                        senderNumber,
+                        {text: draft.notes.find(notes => notes.subject == text.split(' ')[1]).text},
+                        {quoted: messages[0]},
+                        1000
+                    );
+                })
             }
             else {
                 commands.get("reaction").execute(sock, messages, false)

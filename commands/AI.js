@@ -17,12 +17,13 @@ const Ai = {
         const response = result.response;
         const answer = response.text();
 
-        await sock.sendMessage(
-            remoteJid,
-            {text: answer},
-            {quoted: messages},
-            1000
-        )
+        await sendTyping(args).then(async () => {
+            await sock.sendMessage(
+                remoteJid,
+                {text: answer},
+                {quoted: messages}
+            )
+        })
     },
 }
 

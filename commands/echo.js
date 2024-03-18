@@ -6,11 +6,13 @@ const Echo = {
         const { sock, messages, remoteJid, pesan } = args
         const [ _, ...kata ] = pesan.split(' ')
 
-        await sock.sendMessage(
-            remoteJid,
-            { text: kata.join(' ')},
-            { quoted: messages }
-        );
+        await sendTyping(args).then(async () => {
+            await sock.sendMessage(
+                remoteJid,
+                { text: kata.join(' ')},
+                { quoted: messages }
+            );
+        })
     }
 }
 

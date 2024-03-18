@@ -1,5 +1,7 @@
 import fs from "fs";
 import Reaction from "../commands/etc/reaction.js";
+import getTags from "../functions/getTags.js";
+import sendTyping from "../functions/sendTyping.js"
 
 const commands = new Map();
 const files = fs.readdirSync(`./commands`).filter((file) => file.endsWith(".js"));
@@ -25,11 +27,29 @@ async function Messages(args) {
         const fitur = Array.from(commands.values()).find(command => command.name == perintah || command.alias.includes(perintah))
 
         if (fitur) {
-            fitur.execute({ ...args, Reaction, remoteJid, commands, pesan })
+            fitur.execute({ ...args, sendTyping, Reaction, remoteJid, getTags, commands, pesan })
         }
 
         await sock.readMessages([messages.key])
     }
+	else if (pesanDatang.includes(process.env.tag)) {
+		const { tags, roles } = await getTags(args)
+		const incomeTags = pesanDatang.split(" ").filter(teks => teks.includes(process.env.tag))
+		
+		const inisials = incomeTags.forEach(e => e.includes())
+		
+		for (const inisial of inisials) {
+
+			console.log(inisial)
+			// const tag = tags.roles.find(role => role.name == inisial)
+
+            // await sock.sendMessage(
+            //     remoteJid,
+            //     {text: `*${inisial}*\n${tag.msg}`, mentions: tag.jids}
+            // );
+			// await new Promise(resolve => setTimeout(resolve, 2000))
+		}
+	}
 	// const senderNumber = messages[0].key.remoteJid;
 	// const nomorPengirim = (messages[0].key.participant == undefined) ? messages[0].key.remoteJid.split('@')[0] : messages[0].key.participant.split('@')[0]
 	// let incomingMessages = messages[0].message.conversation;

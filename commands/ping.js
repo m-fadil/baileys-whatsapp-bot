@@ -4,14 +4,15 @@ const Ping = {
     alias: ["p"],
     private: false,
     async execute(args) {
-        const { sock, messages } = args
+        const { sock, messages, sendTyping } = args
 
-        await sock.sendMessage(
-            messages.key.remoteJid,
-            { text: `pong`},
-            { quoted: messages },
-            1000
-        );
+        await sendTyping(args).then(async () => {
+            await sock.sendMessage(
+                messages.key.remoteJid,
+                { text: 'pong'},
+                { quoted: messages }
+            );
+        })
     },
 }
 

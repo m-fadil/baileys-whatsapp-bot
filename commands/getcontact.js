@@ -27,7 +27,9 @@ const Getcontact = {
 						if (msg.endsWith("\n")) msg = msg.slice(0, msg.length - 1);
 						else break;
 					}
-					await sock.sendMessage(remoteJid, { text: msg }, { quoted: messages });
+					await sendTyping(args).then(async () => {
+						await sock.sendMessage(remoteJid, { text: msg }, { quoted: messages });
+					})
 				})
 				.catch(async (err) => {
 					try {
@@ -38,7 +40,9 @@ const Getcontact = {
 					} catch {
 						var pesan = "Gagal mengurai pesan error";
 					}
-					await sock.sendMessage(remoteJid, { text: pesan }, { quoted: messages });
+					await sendTyping(args).then(async () => {
+						await sock.sendMessage(remoteJid, { text: pesan }, { quoted: messages });
+					})
 				});
 		} else {
 			commands.get("reaction").execute(sock, messages, false);

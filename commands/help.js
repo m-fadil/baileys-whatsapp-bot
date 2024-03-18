@@ -60,12 +60,13 @@ Nomor pengirim = @me, @myself, @aku, @saya\n
 *judul* dan *pembuat* boleh kosong`
         
         }
-        await sock.sendMessage(
-            senderNumber,
-            {text: help},
-            {quoted: messages[0]},
-            1000
-        );
+        await sendTyping(args).then(async () => {
+            await sock.sendMessage(
+                senderNumber,
+                {text: help},
+                {quoted: messages[0]}
+            );
+        })
     }
 }
 
