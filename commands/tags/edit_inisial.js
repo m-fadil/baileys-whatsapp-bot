@@ -2,17 +2,18 @@ const EditInisial = {
     name: "edit",
     description: "mengedit inisial",
     alias: ["e"],
-    async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database, coll_tag, tags) {
-        const namaLama = text.toLowerCase().split(' ')[2]
-        const namaBaru = text.toLowerCase().split(' ')[3]
+    async execute(args) {
+        const { sock, messages, remoteJid, pesan, Reaction, coll_tag, roles, sendTyping } = args
+        const [ _, __, namaLama, namaBaru ] = pesan.split(" ")
 
-        const tag = tags.roles.find(roles => roles.name == namaLama)
+        const tag = roles.find(role => role == namaLama)
+
         if (tag) {
-            const filter = {"title": tags.title, "roles.name": namaLama}
+            const filter = {"title": remoteJid, "roles.name": namaLama}
             const update = { $set: { "roles.$.name": namaBaru } };
 
             await coll_tag.updateOne(filter, update).then(() => {
-                commands.get("reaction").execute(sock, messages, true)
+                Reaction(args, true)
             })
         }
         else{
@@ -20,8 +21,7 @@ const EditInisial = {
                 await sock.sendMessage(
                     senderNumber,
                     {text: `tidak ada inisial ${namaLama}`},
-                    {quoted: messages[0]},
-                    1000
+                    {quoted: messages}
                 );
             })
         }
