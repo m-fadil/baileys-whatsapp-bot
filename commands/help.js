@@ -20,8 +20,8 @@ const Help = {
             })
             if (!ada) commands.get("reaction").execute(sock, messages, false)
         }
-        else if (text.split(" ").length == 1){
-            help = messages[0].key.participant == undefined
+        else if (_){
+            help = messages.key.participant == undefined
                 ? `/echo *text*
 /getcontact *nomor*
 /help
@@ -62,9 +62,9 @@ Nomor pengirim = @me, @myself, @aku, @saya\n
         }
         await sendTyping(args).then(async () => {
             await sock.sendMessage(
-                senderNumber,
+                remoteJid,
                 {text: help},
-                {quoted: messages[0]}
+                {quoted: messages}
             );
         })
     }
