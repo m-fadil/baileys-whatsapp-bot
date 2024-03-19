@@ -36,7 +36,8 @@ async function connectToWhatsApp() {
 			keys: makeCacheableSignalKeyStore(state.keys, logger),
 		},
         printQRInTerminal: true,
-        msgRetryCounterCache
+        msgRetryCounterCache,
+		generateHighQualityLinkPreview: true,
     });
 
     store?.bind(sock.ev)

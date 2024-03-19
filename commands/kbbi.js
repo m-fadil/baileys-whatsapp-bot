@@ -24,18 +24,16 @@ const Kbbi = {
     description: "mencari arti kata (lema/sub lema)",
     alias: ["kbi", "ki", "k"],
     async execute(args) {
-        const { sock, messages, remoteJid, Reaction, pesan, sendTyping } = args
+        const { messages, Reaction, pesan, sendWithTyping } = args
         const [ _, ...kata ] = pesan.split(" ")
 
         if (kata.length == 1) {
             cari(kata).then(async (result) => {
-                await sendTyping(args).then(async () => {
-                    await sock.sendMessage(
-                        remoteJid,
-                        { text: `*lema:* ${result.lema}\n*arti:* ${result.arti.join(", \n")}` },
-                        { quoted: messages }
-                    );
-                })
+                await sendWithTyping(
+                    args,
+                    { text: `*lema:* ${result.lema}\n*arti:* ${result.arti.join(", \n")}` },
+                    { quoted: messages }
+                );
             }).catch(err => {
                 console.log(err)
             })

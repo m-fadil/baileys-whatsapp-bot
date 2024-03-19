@@ -7,7 +7,7 @@ const Getcontact = {
 	description: "API getcontact",
 	alias: ["gc"],
 	async execute(args) {
-		const { sock, messages, remoteJid, pesan, sendTyping } = args;
+		const { sock, messages, remoteJid, pesan, sendWithTyping } = args;
 		const [_, ...incomeNomor] = pesan.split(" ");
 
 		if (incomeNomor) {
@@ -27,9 +27,7 @@ const Getcontact = {
 						if (msg.endsWith("\n")) msg = msg.slice(0, msg.length - 1);
 						else break;
 					}
-					await sendTyping(args).then(async () => {
-						await sock.sendMessage(remoteJid, { text: msg }, { quoted: messages });
-					})
+					await sendWithTyping(args, { text: msg }, { quoted: messages });
 				})
 				.catch(async (err) => {
 					try {
@@ -40,9 +38,7 @@ const Getcontact = {
 					} catch {
 						var pesan = "Gagal mengurai pesan error";
 					}
-					await sendTyping(args).then(async () => {
-						await sock.sendMessage(remoteJid, { text: pesan }, { quoted: messages });
-					})
+					await sendWithTyping(args, { text: pesan }, { quoted: messages });
 				});
 		} else {
 			commands.get("reaction").execute(sock, messages, false);

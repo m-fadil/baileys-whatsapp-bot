@@ -13,7 +13,7 @@ const Tag = {
 	alias: ["t", "tg"],
 	private: false,
 	async execute(args) {
-		const { sock, messages, getTags, remoteJid, pesan, sendTyping } = args;
+		const { messages, getTags, remoteJid, pesan, sendWithTyping } = args;
 
 		/**
 		 * hapus jika sidah benar
@@ -25,9 +25,7 @@ const Tag = {
 
 			if (pesan.split(" ").length == 1) {
 				const msg = roles.length <= 0 ? "belum ada tag yang ditambahkan" : roles.join("\n");
-				await sendTyping(args).then(async () => {
-					await sock.sendMessage(remoteJid, { text: msg }, { quoted: messages });
-				})
+				await sendWithTyping(args, { text: msg }, { quoted: messages });
 			}
             else {
                 const [ _, perintah ] = pesan.split(" ")

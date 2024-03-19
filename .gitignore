@@ -4,9 +4,10 @@
 /auth
 /database
 /node_modules
-/25-juni-2023.js
-/coba.js
-/package-lock.json
-/testcase.md
+25-juni-2023.js
+coba.js
+package-lock.json
+testcase.md
+note.md
 *.deprecated
 baileys_store_multi.json

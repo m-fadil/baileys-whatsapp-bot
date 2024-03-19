@@ -5,7 +5,7 @@ const Ai = {
     description: "chat dengan AI",
     alias: ["ai"],
     async execute(args) {
-        const { sock, messages, remoteJid, pesan, sendTyping } = args
+        const { messages, pesan, sendWithTyping } = args
 
         const genAI = new GoogleGenerativeAI(process.env.palmApiKey);
 
@@ -17,13 +17,11 @@ const Ai = {
         const response = result.response;
         const answer = response.text();
 
-        await sendTyping(args).then(async () => {
-            await sock.sendMessage(
-                remoteJid,
-                {text: answer},
-                {quoted: messages}
-            )
-        })
+        await sendWithTyping(
+            args,
+            {text: answer},
+            {quoted: messages}
+        )
     },
 }
 

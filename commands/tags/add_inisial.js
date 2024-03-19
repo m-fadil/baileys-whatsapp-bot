@@ -3,7 +3,7 @@ const TagInisial = {
 	description: "menambahkan inisial tag dan anggotanya",
 	alias: ["new", "a"],
 	async execute(args) {
-		const { sock, messages, pesan, Reaction, coll_tag, remoteJid, roles, grup, sendTyping } = args;
+		const { messages, pesan, Reaction, coll_tag, remoteJid, roles, grup, sendWithTyping } = args;
         const [ _, __, inisial, ...at ] = pesan.split(" ")
 
 		/**
@@ -32,9 +32,7 @@ const TagInisial = {
 				Reaction(args, true);
 			});
 		} else {
-			await sendTyping(args).then(async () => {
-				await sock.sendMessage(remoteJid, { text: `inisial ${inisial} sudah ada` }, { quoted: messages });
-			})
+			await sendWithTyping(args, { text: `inisial ${inisial} sudah ada` }, { quoted: messages });
 		}
 	},
 };

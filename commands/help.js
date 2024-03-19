@@ -6,7 +6,7 @@ const Help = {
     alias: ["h"],
     isGroup: true,
     async execute(args) {
-        const { sock, messages, remoteJid, commands, pesan, sendTyping } = args
+        const { sock, messages, commands, pesan, sendWithTyping } = args
         const [ _, command ] = pesan.split(" ")
 
         var help = ""
@@ -60,13 +60,11 @@ Nomor pengirim = @me, @myself, @aku, @saya\n
 *judul* dan *pembuat* boleh kosong`
         
         }
-        await sendTyping(args).then(async () => {
-            await sock.sendMessage(
-                remoteJid,
-                {text: help},
-                {quoted: messages}
-            );
-        })
+        await sendWithTyping(
+            args,
+            {text: help},
+            {quoted: messages}
+        );
     }
 }
 

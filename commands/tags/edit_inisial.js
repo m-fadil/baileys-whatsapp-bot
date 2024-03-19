@@ -3,7 +3,7 @@ const EditInisial = {
     description: "mengedit inisial",
     alias: ["e"],
     async execute(args) {
-        const { sock, messages, remoteJid, pesan, Reaction, coll_tag, roles, sendTyping } = args
+        const { messages, remoteJid, pesan, Reaction, coll_tag, roles, sendWithTyping } = args
         const [ _, __, namaLama, namaBaru ] = pesan.split(" ")
 
         const tag = roles.find(role => role == namaLama)
@@ -17,13 +17,11 @@ const EditInisial = {
             })
         }
         else{
-            await sendTyping(args).then(async () => {
-                await sock.sendMessage(
-                    senderNumber,
-                    {text: `tidak ada inisial ${namaLama}`},
-                    {quoted: messages}
-                );
-            })
+            await sendWithTyping(
+                args,
+                {text: `tidak ada inisial ${namaLama}`},
+                {quoted: messages}
+            );
         }
     }
 }

@@ -1,7 +1,7 @@
 import fs from "fs";
 import Reaction from "../commands/etc/reaction.js";
 import getTags from "../functions/getTags.js";
-import sendTyping from "../functions/sendTyping.js"
+import sendWithTyping from "../functions/sendWithTyping.js"
 
 const commands = new Map();
 const files = fs.readdirSync(`./commands`).filter((file) => file.endsWith(".js"));
@@ -21,16 +21,15 @@ async function Messages(args) {
 	const pesanDatang = messages.message.extendedTextMessage?.text || messages.message.imageMessage?.caption || messages.message.conversation;
 
     if (pesanDatang.startsWith(process.env.command)) {
-        const pesan = pesanDatang.substring(1)
+        const pesan = pesanDatang.substring(1).replace()
         const [ perintah ] = pesan.toLowerCase().split(" ")
 
         const fitur = Array.from(commands.values()).find(command => command.name == perintah || command.alias.includes(perintah))
 
         if (fitur) {
-            fitur.execute({ ...args, sendTyping, Reaction, remoteJid, getTags, commands, pesan })
+			await sock.readMessages([messages.key])
+            await fitur.execute({ ...args, sendWithTyping, Reaction, remoteJid, getTags, commands, pesan })
         }
-
-        await sock.readMessages([messages.key])
     }
 	else if (pesanDatang.includes(process.env.tag)) {
 		const { tags, roles } = await getTags(args)
@@ -42,7 +41,7 @@ async function Messages(args) {
 			if (inisial) {
 				const tag = tags.roles.find(role => role.name == inisial)
 				
-				await sendTyping(args).then(async () => {
+				await sendWithTyping(args).then(async () => {
 					await sock.sendMessage(
 						remoteJid,
 						{text: `*${inisial}*\n${tag.msg}`, mentions: tag.jids}
