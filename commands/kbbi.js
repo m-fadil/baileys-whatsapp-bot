@@ -1,47 +1,48 @@
-import axios from "axios"
-import fs from "fs"
+import axios from 'axios';
+import fs from 'fs';
 
 async function cari(keyword) {
-    const userAgents = JSON.parse(fs.readFileSync("./tools/user-agents.json", "utf8"));
-    
-    if (!keyword) throw new Error("Provide the keyword/kata kunci!")
-    const response = await axios.get(`https://kbbi-api-zhirrr.vercel.app/api/kbbi?text=${keyword}`, {
-        headers: {
-            'User-Agent': userAgents[Math.floor(Math.random() * userAgents.length)],
-        },
-    });
+	const userAgents = JSON.parse(fs.readFileSync('./tools/user-agents.json', 'utf8'));
 
-    if (response.status < 200 || response.status >= 300) {
-        throw new Error('Request failed with status: ' + response.status);
-    }
+	if (!keyword) throw new Error('Provide the keyword/kata kunci!');
+	const response = await axios.get(`https://kbbi-api-zhirrr.vercel.app/api/kbbi?text=${keyword}`, {
+		headers: {
+			'User-Agent': userAgents[Math.floor(Math.random() * userAgents.length)],
+		},
+	});
 
-    const data = response.data;
-    return data;
+	if (response.status < 200 || response.status >= 300) {
+		throw new Error('Request failed with status: ' + response.status);
+	}
+
+	const data = response.data;
+	return data;
 }
 
 const Kbbi = {
-    name: "kbbi",
-    description: "mencari arti kata (lema/sub lema)",
-    alias: ["kbi", "ki", "k"],
-    async execute(args) {
-        const { messages, Reaction, pesan, sendWithTyping } = args
-        const [ _, ...kata ] = pesan.split(" ")
+	name: 'kbbi',
+	description: 'mencari arti kata (lema/sub lema)',
+	alias: ['kbi', 'ki', 'k'],
+	async execute(args) {
+		const { messages, Reaction, pesan, sendWithTyping } = args;
+		const [_, ...kata] = pesan.split(' ');
 
-        if (kata.length == 1) {
-            cari(kata).then(async (result) => {
-                await sendWithTyping(
-                    args,
-                    { text: `*lema:* ${result.lema}\n*arti:* ${result.arti.join(", \n")}` },
-                    { quoted: messages }
-                );
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-        else {
-            Reaction(args, false)
-        }
-    }
-}
+		if (kata.length == 1) {
+			cari(kata)
+				.then(async (result) => {
+					await sendWithTyping(
+						args,
+						{ text: `*lema:* ${result.lema}\n*arti:* ${result.arti.join(', \n')}` },
+						{ quoted: messages },
+					);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} else {
+			Reaction(args, false);
+		}
+	},
+};
 
-export default Kbbi
+export default Kbbi;

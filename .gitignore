@@ -1,12 +1,13 @@
 .dockerignore
 .env
 .envcopy
-\auth
-\database
-\node_modules
+/auth
+/database
+/node_modules
 25-juni-2023.js
 coba.js
-\commands\tes.js
+/commands/tes.js
+/commands/dayoff.js
 package-lock.json
 testcase.md
 note.md

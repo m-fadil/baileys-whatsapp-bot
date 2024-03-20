@@ -1,9 +1,9 @@
-import "dotenv/config.js";
+import 'dotenv/config.js';
 
 const All = {
-	name: "all",
-	description: "tag semua orang yang ada di grup",
-	alias: ["everyone"],
+	name: 'all',
+	description: 'tag semua orang yang ada di grup',
+	alias: ['everyone'],
 	forGroup: true,
 	async execute(args) {
 		const { sock, messages, remoteJid, sendWithTyping } = args;
@@ -11,7 +11,7 @@ const All = {
 		const grup = await sock.groupMetadata(remoteJid);
 
 		const jids = grup.participants.map((user) => user.id).filter((user) => !user.includes(process.env.nomor));
-		const msg = jids.map((jid) => "@" + jid.split("@")[0]).join(" ");
+		const msg = jids.map((jid) => '@' + jid.split('@')[0]).join(' ');
 
 		await sendWithTyping(args, { text: msg, mentions: jids }, { quoted: messages }, 1000);
 	},

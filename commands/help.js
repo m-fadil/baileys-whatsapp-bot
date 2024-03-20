@@ -1,27 +1,27 @@
 //masih belum
 
 const Help = {
-    name: "help",
-    description: "menampilkan commands",
-    alias: ["h"],
-    async execute(args) {
-        const { sock, messages, commands, pesan, sendWithTyping } = args
-        const [ _, command ] = pesan.split(" ")
+	name: 'help',
+	description: 'menampilkan commands',
+	alias: ['h'],
+	async execute(args) {
+		const { sock, messages, commands, pesan, sendWithTyping } = args;
+		const [_, command] = pesan.split(' ');
 
-        var help = ""
-        var ada = false
-        if (command) {
-            commands.forEach(async c => {
-                if (c.alias.includes(command)) {
-                    help = `*command*: ${c.name}\n*alias*: ${c.alias.join(", ")}\n*deskripsi*: ${c.description}`
-                    ada = true
-                }
-            })
-            if (!ada) commands.get("reaction").execute(sock, messages, false)
-        }
-        else if (_){
-            help = messages.key.participant == undefined
-                ? `/echo *text*
+		var help = '';
+		var ada = false;
+		if (command) {
+			commands.forEach(async (c) => {
+				if (c.alias.includes(command)) {
+					help = `*command*: ${c.name}\n*alias*: ${c.alias.join(', ')}\n*deskripsi*: ${c.description}`;
+					ada = true;
+				}
+			});
+			if (!ada) commands.get('reaction').execute(sock, messages, false);
+		} else if (_) {
+			help =
+				messages.key.participant == undefined
+					? `/echo *text*
 /getcontact *nomor*
 /help
 /help *command*
@@ -34,7 +34,7 @@ const Help = {
 *NB**
 Nomor pengirim = @me, @myself, @aku, @saya\n
 *judul* dan *pembuat* boleh kosong`
-                : `/all
+					: `/all
 /echo *text*
 /getcontact *nomor*
 /help
@@ -56,15 +56,10 @@ Nomor pengirim = @me, @myself, @aku, @saya\n
 Anonim chat buka: cutt.ly/anonim-chat\n
 *NB**
 Nomor pengirim = @me, @myself, @aku, @saya\n
-*judul* dan *pembuat* boleh kosong`
-        
-        }
-        await sendWithTyping(
-            args,
-            {text: help},
-            {quoted: messages}
-        );
-    }
-}
+*judul* dan *pembuat* boleh kosong`;
+		}
+		await sendWithTyping(args, { text: help }, { quoted: messages });
+	},
+};
 
-export default Help
+export default Help;
