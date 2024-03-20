@@ -7,7 +7,7 @@ const Getcontact = {
 	description: "API getcontact",
 	alias: ["gc"],
 	async execute(args) {
-		const { sock, messages, remoteJid, pesan, sendWithTyping } = args;
+		const { messages, Reaction, pesan, sendWithTyping } = args;
 		const [_, ...incomeNomor] = pesan.split(" ");
 
 		if (incomeNomor) {
@@ -41,7 +41,7 @@ const Getcontact = {
 					await sendWithTyping(args, { text: pesan }, { quoted: messages });
 				});
 		} else {
-			commands.get("reaction").execute(sock, messages, false);
+			Reaction(args, false);
 		}
 	},
 };

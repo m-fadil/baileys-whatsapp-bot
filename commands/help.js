@@ -4,7 +4,6 @@ const Help = {
     name: "help",
     description: "menampilkan commands",
     alias: ["h"],
-    isGroup: true,
     async execute(args) {
         const { sock, messages, commands, pesan, sendWithTyping } = args
         const [ _, command ] = pesan.split(" ")

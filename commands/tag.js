@@ -11,7 +11,7 @@ const Tag = {
 	name: "tag",
 	description: "menampilkan tags",
 	alias: ["t", "tg"],
-	private: false,
+	forGroup: true,
 	async execute(args) {
 		const { messages, getTags, remoteJid, pesan, sendWithTyping } = args;
 
@@ -38,29 +38,8 @@ const Tag = {
 				else if (roles.includes(perintah)) {
 					tagsCommand.get("inisial").execute({ ...args, ...dbTags })
 				}
-
-                // if (text.toLowerCase().split(' ')[1] == 'add') {
-                //     tagsCommand.get('add_inisial').execute(...arguments, coll_tag, tags, grup)
-                // }
-                // else if (text.toLowerCase().split(' ')[1] == 'edit') {
-                //     tagsCommand.get('edit_inisial').execute(...arguments, coll_tag, tags)
-                // }
-                // else if (text.toLowerCase().split(' ')[1] == 'remove' || text.toLowerCase().split(' ')[1] == 'del') {
-                //     tagsCommand.get('remove_inisial').execute(...arguments, coll_tag, tags)
-                // }
-                // else if(tags.roles.find(roles => roles.name == text.split(' ')[1])) {
-                //     tagsCommand.get('inisial').execute(...arguments, tagsCommand, coll_tag, tags, grup)
-                // }
             }
 		}
-		// else {
-		//     await sock.sendMessage(
-		//         senderNumber,
-		//         { text: `Anda tidak sedang berada di grup`},
-		//         { quoted: messages[0] },
-		//         1000
-		//     );
-		// }
 	},
 };
 
