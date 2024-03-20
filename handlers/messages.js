@@ -11,9 +11,9 @@ for (const file of files) {
 }
 
 async function Messages(args) {
-	const { sock, messages } = args;
+	const { sock, messages, remoteJid } = args;
 
-    const remoteJid = messages.key.remoteJid
+	const fromGroup = remoteJid.includes("g.us")
 
 	/**
 	 * @type {String}
@@ -21,17 +21,26 @@ async function Messages(args) {
 	const pesanDatang = messages.message.extendedTextMessage?.text || messages.message.imageMessage?.caption || messages.message.conversation;
 
     if (pesanDatang.startsWith(process.env.command)) {
-        const pesan = pesanDatang.substring(1).replace()
+        const pesan = pesanDatang.substring(1)
         const [ perintah ] = pesan.toLowerCase().split(" ")
 
         const fitur = Array.from(commands.values()).find(command => command.name == perintah || command.alias.includes(perintah))
 
-        if (fitur) {
+        if (fitur && fromGroup == !!fitur.forGroup) {
 			await sock.readMessages([messages.key])
-            await fitur.execute({ ...args, sendWithTyping, Reaction, remoteJid, getTags, commands, pesan })
+            await fitur.execute({ ...args, sendWithTyping, Reaction, getTags, commands, pesan })
         }
+		else {
+			await sendWithTyping(
+				args,
+				{ text: `command ${perintah} tidak ada` },
+				{ quoted: messages }
+			)
+		}
     }
 	else if (pesanDatang.includes(process.env.tag)) {
+        await sock.readMessages([messages.key])
+		
 		const { tags, roles } = await getTags(args)
 		const incomeTags = pesanDatang.split(" ").filter(teks => teks.includes(process.env.tag))
 		
@@ -41,15 +50,17 @@ async function Messages(args) {
 			if (inisial) {
 				const tag = tags.roles.find(role => role.name == inisial)
 				
-				await sendWithTyping(args).then(async () => {
-					await sock.sendMessage(
-						remoteJid,
-						{text: `*${inisial}*\n${tag.msg}`, mentions: tag.jids}
-					);
-				})
+				await sendWithTyping(
+					args,
+					{text: `*${inisial}*\n${tag.msg}`, mentions: tag.jids}
+				);
 			}
 		}
-        await sock.readMessages([messages.key])
+	}
+	else if (pesanDatang.startsWith(process.env.ai)) {
+        const pesan = pesanDatang.substring(1)
+
+		commands.get("AI").execute({ ...args, pesan, sendWithTyping })
 	}
 }
 
