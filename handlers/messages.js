@@ -24,6 +24,8 @@ async function Messages(args) {
 		messages.message.conversation;
 
 	if (pesanDatang.startsWith(process.env.command)) {
+		await sock.readMessages([messages.key]);
+		
 		const pesan = pesanDatang.substring(1);
 		const [perintah] = pesan.toLowerCase().split(' ');
 
@@ -31,8 +33,7 @@ async function Messages(args) {
 			(command) => command.name == perintah || command.alias.includes(perintah),
 		);
 
-		if (fitur && fromGroup == !!fitur.forGroup) {
-			await sock.readMessages([messages.key]);
+		if (fitur && (fromGroup || !fitur.forGroup)) {
 			await fitur.execute({ ...args, sendWithTyping, Reaction, getTags, commands, pesan });
 		} else {
 			await sendWithTyping(args, { text: `command ${perintah} tidak ada` }, { quoted: messages });
@@ -53,6 +54,8 @@ async function Messages(args) {
 			}
 		}
 	} else if (pesanDatang.startsWith(process.env.ai)) {
+		await sock.readMessages([messages.key]);
+
 		const pesan = pesanDatang.substring(1);
 
 		commands.get('AI').execute({ ...args, pesan, sendWithTyping });
