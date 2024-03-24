@@ -26,7 +26,12 @@ async function Messages(args) {
 	if (pesanDatang.startsWith(process.env.command)) {
 		await sock.readMessages([messages.key]);
 		
-		const pesan = pesanDatang.substring(1);
+		const identitas = ["@me", "@myself", "@aku", "@saya"];
+		const regex = new RegExp(identitas.join('|'), 'g');
+		const [ senderNumber ] = fromGroup ? messages.key.participant.split("@") : remoteJid.split("@")
+
+		const rawPesan = pesanDatang.substring(1);
+		const pesan = rawPesan.replace(regex, "@"+senderNumber);
 		const [perintah] = pesan.toLowerCase().split(' ');
 
 		const fitur = Array.from(commands.values()).find(
