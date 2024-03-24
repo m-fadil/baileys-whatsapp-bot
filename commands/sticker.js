@@ -5,6 +5,7 @@ const CreateSticker = {
 	name: 'sticker',
 	description: 'membuat sticker dari gambar',
 	alias: ['stiker', 's'],
+	help: ['sticker *judul pembuat*'],
 	async execute(args) {
 		/**
 		 * kurang fitur quoted pesan bergambar dijadikan sticker

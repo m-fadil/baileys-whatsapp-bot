@@ -12,32 +12,35 @@ const Tag = {
 	description: 'menampilkan tags',
 	alias: ['t', 'tg'],
 	forGroup: true,
+	help: [
+		'tag',
+		'tag add *inisial @.. @..*',
+		'tag edit *inisial_lama inisial_baru*',
+		'tag remove *inisial*',
+		'tag *inisial*',
+		'tag *inisial add @.. @..*',
+		'tag *inisial remove @.. @..*',
+	],
 	async execute(args) {
 		const { messages, getTags, remoteJid, pesan, sendWithTyping } = args;
 
-		/**
-		 * hapus jika sidah benar
-		 */
-		const isMessageFromGroup = remoteJid.includes('@g.us');
-		if (isMessageFromGroup) {
-			const dbTags = await getTags(args);
-			const { roles } = dbTags;
+		const dbTags = await getTags(args);
+		const { roles } = dbTags;
 
-			if (pesan.split(' ').length == 1) {
-				const msg = roles.length <= 0 ? 'belum ada tag yang ditambahkan' : roles.join('\n');
-				await sendWithTyping(args, { text: msg }, { quoted: messages });
-			} else {
-				const [_, perintah] = pesan.split(' ');
+		if (pesan.split(' ').length == 1) {
+			const msg = roles.length <= 0 ? 'belum ada tag yang ditambahkan' : roles.join('\n');
+			await sendWithTyping(args, { text: msg }, { quoted: messages });
+		} else {
+			const [_, perintah] = pesan.split(' ');
 
-				const fitur = [...tagsCommand.values()].find(
-					(command) => command.name == perintah || command.alias.includes(perintah),
-				);
+			const fitur = [...tagsCommand.values()].find(
+				(command) => command.name == perintah || command.alias.includes(perintah),
+			);
 
-				if (fitur) {
-					fitur.execute({ ...args, ...dbTags });
-				} else if (roles.includes(perintah)) {
-					tagsCommand.get('inisial').execute({ ...args, ...dbTags });
-				}
+			if (fitur) {
+				fitur.execute({ ...args, ...dbTags });
+			} else if (roles.includes(perintah)) {
+				tagsCommand.get('inisial').execute({ ...args, ...dbTags });
 			}
 		}
 	},

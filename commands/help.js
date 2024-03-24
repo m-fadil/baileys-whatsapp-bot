@@ -1,64 +1,52 @@
-//masih belum
+function parseCommand(commands, fromGroup) {
+	return Array.from(commands.values())
+		.filter(command => !command.forGroup || fromGroup)
+		.map((command) => command.help)
+		.filter((command) => command != undefined)
+		.map((command) => command.map(c => process.env.command + c).join('\n'))
+		.join('\n');
+}
+
+function parseFitur(fitur) {
+	const { name, alias, description, help } = fitur;
+	const aliasString = alias.join(', ');
+	const penggunaan = help.map((c) => `${process.env.command}${c}`).join('\n');
+
+	return `*command*: ${name}\n*alias*: ${aliasString}\n*deskripsi*: ${description}\n*penggunaan*:\n${penggunaan}`;
+}
+
 
 const Help = {
 	name: 'help',
 	description: 'menampilkan commands',
 	alias: ['h'],
+	help: [
+		"help",
+		"help *command*"
+	],
 	async execute(args) {
-		const { sock, messages, commands, pesan, sendWithTyping } = args;
-		const [_, command] = pesan.split(' ');
+		const { messages, remoteJid, commands, pesan, sendWithTyping } = args;
+		const [_, perintah] = pesan.split(' ');
 
-		var help = '';
-		var ada = false;
-		if (command) {
-			commands.forEach(async (c) => {
-				if (c.alias.includes(command)) {
-					help = `*command*: ${c.name}\n*alias*: ${c.alias.join(', ')}\n*deskripsi*: ${c.description}`;
-					ada = true;
-				}
-			});
-			if (!ada) commands.get('reaction').execute(sock, messages, false);
-		} else if (_) {
-			help =
-				messages.key.participant == undefined
-					? `/echo *text*
-/getcontact *nomor*
-/help
-/help *command*
-/kbbi *kata*
-/sticker *judul pembuat*
-/note
-/note add *subjek isi*
-/note remove *subjek*
-?<text to chat>\n
-*NB**
-Nomor pengirim = @me, @myself, @aku, @saya\n
-*judul* dan *pembuat* boleh kosong`
-					: `/all
-/echo *text*
-/getcontact *nomor*
-/help
-/help *command*
-/kbbi *kata*
-/note
-/note add *subjek isi*
-/note remove *subjek*
-/sticker *judul pembuat*
-/tag
-/tag add *inisial @.. @..*
-/tag edit *inisial_lama inisial_baru*
-/tag remove *inisial*
-/tag *inisial*
-/tag *inisial add @.. @..*
-/tag *inisial remove @.. @..*
-*#inisial*
-?<text to chat>\n
-Anonim chat buka: cutt.ly/anonim-chat\n
-*NB**
-Nomor pengirim = @me, @myself, @aku, @saya\n
-*judul* dan *pembuat* boleh kosong`;
+		const fromGroup = remoteJid.includes('g.us');
+		const fitur = Array.from(commands.values()).find(
+			(command) => command.name == perintah || command.alias.includes(perintah),
+		);
+
+		if (perintah) {
+			if (fitur && (fromGroup || !fitur.forGroup)) {
+				const text = parseFitur(fitur);
+				await sendWithTyping(args, { text}, { quoted: messages });
+			}
+			else {
+				await sendWithTyping(args, { text: `command ${perintah} tidak ada` }, { quoted: messages });
+			}
 		}
-		await sendWithTyping(args, { text: help }, { quoted: messages });
+		else {
+			const allCommand = parseCommand(commands, fromGroup)
+			const text = `${allCommand}\n\n*NB**\nNomor pengirim = @me, @myself, @aku, @saya\n*judul* dan *pembuat* boleh kosong`;
+			await sendWithTyping(args, { text }, { quoted: messages });
+		}
 	},
 };
 

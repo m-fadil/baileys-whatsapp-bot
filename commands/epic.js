@@ -4,6 +4,7 @@ const Epic = {
 	name: 'epic',
 	description: 'ping',
 	alias: ['epic-games', 'free-games', 'eg'],
+	help: ["epic"],
 	async execute(args) {
 		const { sendWithTyping } = args;
 

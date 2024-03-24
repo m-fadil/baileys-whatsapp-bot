@@ -2,6 +2,7 @@ const Echo = {
 	name: 'echo',
 	description: 'mengembalikan value yang dimasukkan',
 	alias: ['print', 'ec'],
+	help: ["echo *text*"],
 	async execute(args) {
 		const { messages, pesan, sendWithTyping } = args;
 		const [_, ...kata] = pesan.split(' ');

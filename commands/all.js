@@ -5,6 +5,7 @@ const All = {
 	description: 'tag semua orang yang ada di grup',
 	alias: ['everyone'],
 	forGroup: true,
+	help: ["all"],
 	async execute(args) {
 		const { sock, messages, remoteJid, sendWithTyping } = args;
 

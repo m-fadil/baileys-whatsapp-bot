@@ -4,6 +4,11 @@ const Note = {
 	name: 'note',
 	description: 'menyimpan catatan',
 	alias: ['note'],
+	help: [
+		"note",
+		"note add *subjek isi*",
+		"note remove *subjek*"
+	],
 	async execute(sock, messages, commands, senderNumber, text, quotedPesan, client, database) {
 		const note = new Map();
 		const files = fs.readdirSync(`./commands/note`).filter((file) => file.endsWith('.js'));

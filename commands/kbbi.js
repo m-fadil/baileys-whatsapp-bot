@@ -23,6 +23,9 @@ const Kbbi = {
 	name: 'kbbi',
 	description: 'mencari arti kata (lema/sub lema)',
 	alias: ['kbi', 'ki', 'k'],
+	help: [
+		"kbbi *kata*",
+	],
 	async execute(args) {
 		const { messages, Reaction, pesan, sendWithTyping } = args;
 		const [_, ...kata] = pesan.split(' ');

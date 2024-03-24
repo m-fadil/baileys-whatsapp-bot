@@ -6,6 +6,7 @@ const Getcontact = {
 	name: 'getcontact',
 	description: 'API getcontact',
 	alias: ['gc'],
+	help: ["getcontact *nomor*"],
 	async execute(args) {
 		const { messages, Reaction, pesan, sendWithTyping } = args;
 		const [_, ...incomeNomor] = pesan.split(' ');
