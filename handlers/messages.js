@@ -25,13 +25,13 @@ async function Messages(args) {
 
 	if (pesanDatang.startsWith(process.env.command)) {
 		await sock.readMessages([messages.key]);
-		
-		const identitas = ["@me", "@myself", "@aku", "@saya"];
+
+		const identitas = ['@me', '@myself', '@aku', '@saya'];
 		const regex = new RegExp(identitas.join('|'), 'g');
-		const [ senderNumber ] = fromGroup ? messages.key.participant.split("@") : remoteJid.split("@")
+		const [senderNumber] = fromGroup ? messages.key.participant.split('@') : remoteJid.split('@');
 
 		const rawPesan = pesanDatang.substring(1);
-		const pesan = rawPesan.replace(regex, "@"+senderNumber);
+		const pesan = rawPesan.replace(regex, '@' + senderNumber);
 		const [perintah] = pesan.toLowerCase().split(' ');
 
 		const fitur = Array.from(commands.values()).find(
@@ -49,7 +49,7 @@ async function Messages(args) {
 		const { tags, roles } = await getTags(args);
 		const incomeTags = pesanDatang.split(' ').filter((teks) => teks.includes(process.env.tag));
 
-		const inisials = incomeTags.map((tag) => roles.find((role) => tag.includes(role)));
+		const inisials = incomeTags.map((tag) => roles.find((role) => tag.substring(1) == role));
 
 		for (const inisial of inisials) {
 			if (inisial) {
