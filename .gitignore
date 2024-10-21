@@ -1,0 +1,11 @@
+#Folder
+node_modules
+baileys
+dist
+
+#File
+yarn.lock
+.env
+*.dev.ts
+tsconfig.tsbuildinfo
+package-lock.json

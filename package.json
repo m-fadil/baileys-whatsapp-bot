@@ -1,0 +1,48 @@
+{
+    "dependencies": {
+        "@types/chance": "^1.1.6",
+        "@types/crypto-js": "^4.2.2",
+        "@whiskeysockets/baileys": "^6.7.8",
+        "axios": "^1.7.7",
+        "chance": "^1.1.12",
+        "cheerio": "^1.0.0",
+        "cliui": "^8.0.1",
+        "crypto-js": "^4.2.0",
+        "dotenv": "^16.4.5",
+        "formdata-node": "^6.0.3",
+        "mongoose": "^8.7.1",
+        "qrcode-terminal": "^0.12.0",
+        "splitargs": "^0.0.7",
+        "wa-sticker-formatter": "^4.4.4",
+        "yargs-parser": "^21.1.1"
+    },
+    "scripts": {
+        "start": "node ./dist/index.js",
+        "start:dev": "nodemon --ignore baileys ./dist/index.js",
+        "start:build": "npm run build && npm run start",
+        "clean": "rimraf ./dist && npm run build",
+        "build": "tsc --build && tsc-alias",
+        "build:env": "tsc --build && tsc-alias && copy \".env\" \"dist\\.env\"",
+        "build:clean": "npm run clean && npm run build",
+        "seed": "npm build && node ./dist/database/seed/seed.js",
+        "seed:force": "node ./dist/database/seed/seed.js",
+        "db:test": "npm run build && node ./dist/database/test.js",
+        "prettier:fix": "prettier --write .",
+        "prettier:check": "prettier --check ."
+    },
+    "name": "ts-wa-bot",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+        "@types/yargs-parser": "^21.0.3",
+        "nodemon": "^3.1.7",
+        "prettier": "^3.3.3",
+        "rimraf": "^6.0.1",
+        "ts-node": "^10.9.2",
+        "tsc-alias": "^1.8.10",
+        "typescript": "^5.6.3"
+    }
+}
